@@ -1,0 +1,30 @@
+.input__container {
+  position: relative;
+  padding: 0.7em;
+  border: 1px solid var(--blue);
+  border-radius: 3px;
+  cursor: text;
+}
+
+.input {
+  font-size: 1rem;
+  outline: none;
+  border: none;
+}
+
+.input__label {
+  position: absolute;
+  left: 0.8em;
+  top: 0.8em;
+  pointer-events: none;
+  transition: top 0.3s ease-in-out;
+}
+
+.input:focus ~ .input__label,
+.input:not(:placeholder-shown) ~ .input__label {
+  position: absolute;
+  top: 0;
+  left: 1em;
+  font-size: 0.8rem;
+  color: var(--blue);
+}

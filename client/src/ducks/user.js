@@ -10,7 +10,8 @@ export const receiveSession = session => ({
 
 const initialState = {
   session: {},
-  auth: false
+  auth: false,
+  fetching: false
 };
 // Reducer
 export const user = (state = initialState, action) => {

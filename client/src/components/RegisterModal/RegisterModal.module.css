@@ -1,0 +1,25 @@
+.register__form {
+  display: flex;
+  flex-direction: column;
+}
+
+.register__form > *:not(:last-child) {
+  margin-bottom: 1em;
+}
+
+.register__button {
+  align-self: flex-start;
+}
+
+.register__login {
+  font-size: 0.8rem;
+}
+
+.register__login__link {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--blue);
+  padding: 0;
+  cursor: pointer;
+  border: none;
+}
