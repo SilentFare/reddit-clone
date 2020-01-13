@@ -1,0 +1,10 @@
+.logo__link {
+  display: flex;
+  align-items: center;
+  color: var(--blue);
+  text-decoration: none;
+}
+
+.logo {
+  font-size: 2rem;
+}

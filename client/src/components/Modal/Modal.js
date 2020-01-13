@@ -7,7 +7,14 @@ import styles from './Modal.module.css';
 export const Modal = ({ show, close, children }) => {
   return show
     ? createPortal(
-        <div className={styles.modal__background}>
+        <div
+          className={styles.modal__background}
+          onClick={event => {
+            if (event.target === event.currentTarget) {
+              close();
+            }
+          }}
+        >
           <div className={styles.modal}>
             <div className={styles.modal__header}>
               <MdClose

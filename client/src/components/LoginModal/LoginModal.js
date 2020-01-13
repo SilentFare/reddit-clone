@@ -5,11 +5,16 @@ import Modal from '../Modal';
 import Input from '../Input';
 import Button from '../Button';
 
-export const LoginModal = ({ show, toggleLogin }) => {
+export const LoginModal = ({ show, toggleLogin, toggleRegister }) => {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
 
   const update = fn => event => fn(event.target.value);
+
+  const handleChangeModal = () => {
+    toggleLogin();
+    toggleRegister();
+  };
 
   const handleFormSubmit = event => {
     event.preventDefault();
@@ -26,11 +31,16 @@ export const LoginModal = ({ show, toggleLogin }) => {
           value={password}
         />
         <Button type='submit' label='Log In' className={styles.login__button} />
-        <span className={styles.login__register}>
-          Need an account?{' '}
-          <button className={styles.login__register__link}>Register</button>
-        </span>
       </form>
+      <span className={styles.login__register}>
+        Need an account?{' '}
+        <button
+          className={styles.login__register__link}
+          onClick={handleChangeModal}
+        >
+          Register
+        </button>
+      </span>
     </Modal>
   );
 };

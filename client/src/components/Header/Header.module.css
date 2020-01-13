@@ -11,18 +11,14 @@
   background: var(--black);
 }
 
-.header__logo__link {
+.header__left {
   display: flex;
   align-items: center;
-  color: var(--blue);
-  text-decoration: none;
+  justify-content: center;
 }
 
-.header__logo {
-  font-size: 2rem;
-}
-
-.header__left {
+.header__left > *:not(:last-child) {
+  margin-right: 1em;
 }
 
 .header__right > *:not(:last-child) {

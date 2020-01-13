@@ -1,0 +1,21 @@
+.hamburger__button {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+.hamburger__button > *:not(:last-child) {
+  margin-bottom: 0.4em;
+}
+
+.hamburger__bun {
+  width: 2em;
+  height: 0.2em;
+  border-radius: 3px;
+  background: var(--blue);
+  transition: all 0.3s linear;
+  transform-origin: 1px;
+}

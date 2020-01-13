@@ -5,13 +5,18 @@ import Modal from '../Modal';
 import Input from '../Input';
 import Button from '../Button';
 
-export const RegisterModal = ({ show, toggleRegister }) => {
+export const RegisterModal = ({ show, toggleRegister, toggleLogin }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
   const update = fn => event => fn(event.target.value);
+
+  const handleChangeModal = () => {
+    toggleRegister();
+    toggleLogin();
+  };
 
   const handleFormSubmit = event => {
     event.preventDefault();
@@ -43,11 +48,16 @@ export const RegisterModal = ({ show, toggleRegister }) => {
           label='Register'
           className={styles.register__button}
         />
-        <span className={styles.register__login}>
-          Already have an account?{' '}
-          <button className={styles.register__login__link}>Log In</button>
-        </span>
       </form>
+      <span className={styles.register__login}>
+        Already have an account?{' '}
+        <button
+          className={styles.register__login__link}
+          onClick={handleChangeModal}
+        >
+          Log In
+        </button>
+      </span>
     </Modal>
   );
 };

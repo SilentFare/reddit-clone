@@ -1,12 +1,12 @@
 import { connect } from 'react-redux';
 
 import { RegisterModal } from './RegisterModal';
-import { toggleRegister } from '../../ducks/modals';
+import { toggleRegister, toggleLogin } from '../../ducks/modals';
 
 const mapStateToProps = state => ({
   show: state.modals.register
 });
 
-const mapDispatchToProps = { toggleRegister };
+const mapDispatchToProps = { toggleRegister, toggleLogin };
 
 export default connect(mapStateToProps, mapDispatchToProps)(RegisterModal);

@@ -12,6 +12,7 @@ import Discussion from '../../routes/Discussion';
 import Header from '../Header';
 import RegisterModal from '../RegisterModal';
 import LoginModal from '../LoginModal';
+import Sidebar from '../Sidebar';
 
 export const App = () => {
   return (
@@ -20,6 +21,7 @@ export const App = () => {
         <Header />
         <RegisterModal />
         <LoginModal />
+        <Sidebar />
         <main className={styles.main}>
           <Switch>
             <Route path='/' exact>
