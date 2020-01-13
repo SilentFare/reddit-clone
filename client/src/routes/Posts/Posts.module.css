@@ -1,2 +1,4 @@
 .posts {
+  height: 100%;
+  background: var(--lighter-black);
 }

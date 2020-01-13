@@ -1,0 +1,27 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  min-height: 5em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2em;
+  background: var(--black);
+}
+
+.header__logo__link {
+  color: var(--blue);
+}
+
+.header__logo {
+  font-size: 2rem;
+}
+
+.header__left {
+}
+
+.header__right > *:not(:last-child) {
+  margin-right: 1em;
+}

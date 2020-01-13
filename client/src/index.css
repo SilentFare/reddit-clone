@@ -13,3 +13,9 @@ body {
   padding: 0;
   font-family: 'Roboto', sans-serif;
 }
+
+:root {
+  --blue: rgb(88, 143, 248);
+  --black: rgb(15, 15, 15);
+  --lighter-black: rgb(26, 28, 34);
+}
