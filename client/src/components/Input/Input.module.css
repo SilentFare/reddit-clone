@@ -24,7 +24,7 @@
 .input:not(:placeholder-shown) ~ .input__label {
   position: absolute;
   top: 0;
-  left: 1em;
+  left: 0.9em;
   font-size: 0.8rem;
   color: var(--blue);
 }

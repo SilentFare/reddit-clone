@@ -11,6 +11,7 @@ import Posts from '../../routes/Posts';
 import Discussion from '../../routes/Discussion';
 import Header from '../Header';
 import RegisterModal from '../RegisterModal';
+import LoginModal from '../LoginModal';
 
 export const App = () => {
   return (
@@ -18,6 +19,7 @@ export const App = () => {
       <Router>
         <Header />
         <RegisterModal />
+        <LoginModal />
         <main className={styles.main}>
           <Switch>
             <Route path='/' exact>
