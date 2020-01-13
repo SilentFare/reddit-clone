@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import styles from './Button.module.css';
 
-export const Button = ({ to, href, label, type, className }) => {
+export const Button = ({ to, href, label, type, className, onClick }) => {
   if (to) {
     return (
       <Link to={to} className={`${styles.button} ${className}`}>
@@ -22,7 +22,11 @@ export const Button = ({ to, href, label, type, className }) => {
   }
 
   return (
-    <button type={type} className={`${styles.button} ${className}`}>
+    <button
+      type={type}
+      className={`${styles.button} ${className}`}
+      onClick={onClick}
+    >
       {label}
     </button>
   );
@@ -31,5 +35,6 @@ export const Button = ({ to, href, label, type, className }) => {
 Button.propTypes = {
   label: PropTypes.string.isRequired,
   to: PropTypes.string,
-  href: PropTypes.string
+  href: PropTypes.string,
+  onClick: PropTypes.func
 };

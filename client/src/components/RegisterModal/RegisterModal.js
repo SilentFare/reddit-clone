@@ -5,13 +5,13 @@ import Modal from '../Modal';
 import Input from '../Input';
 import Button from '../Button';
 
-export const RegisterModal = ({ show }) => {
+export const RegisterModal = ({ show, toggleRegister }) => {
   const handleFormSubmit = event => {
     event.preventDefault();
   };
 
   return (
-    <Modal show={show}>
+    <Modal show={show} close={toggleRegister}>
       <form onSubmit={handleFormSubmit} className={styles.register__form}>
         <Input label='Name' />
         <Input label='E-mail address' />

@@ -5,7 +5,7 @@ import { FaCanadianMapleLeaf } from 'react-icons/fa';
 import styles from './Header.module.css';
 import Button from '../Button';
 
-export const Header = () => {
+export const Header = ({ toggleRegister }) => {
   return (
     <div className={styles.header}>
       <div className={styles.header__left}>
@@ -14,7 +14,7 @@ export const Header = () => {
         </Link>
       </div>
       <div className={styles.header__right}>
-        <Button label='Register' />
+        <Button label='Register' onClick={toggleRegister} />
         <Button label='Log In' />
       </div>
     </div>

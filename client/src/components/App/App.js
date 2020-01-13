@@ -17,7 +17,7 @@ export const App = () => {
     <div className={styles.app}>
       <Router>
         <Header />
-        <RegisterModal show={true} />
+        <RegisterModal />
         <main className={styles.main}>
           <Switch>
             <Route path='/' exact>
