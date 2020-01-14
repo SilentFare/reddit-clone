@@ -3,10 +3,43 @@ const RECEIVE_SESSION = 'RECEIVE_SESSION';
 const LOGOUT = 'LOGOUT';
 
 // Action creators
-export const receiveSession = session => ({
+const receiveSession = session => ({
   type: RECEIVE_SESSION,
   session
 });
+
+export const register = data => async dispatch => {
+  try {
+    const response = await fetch('/api/users/register', {
+      method: 'POST',
+      body: JSON.stringify(data),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    const responseData = await response.json();
+    localStorage.setItem('token', responseData.token);
+    dispatch(receiveSession(responseData.user));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const refreshToken = () => async dispatch => {
+  try {
+    const response = await fetch('/api/users/refresh_token', {
+      method: 'GET',
+      credentials: 'include'
+    });
+    if (response.ok) {
+      const responseData = await response.json();
+      localStorage.setItem('token', responseData.token);
+    } else {
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 const initialState = {
   session: {},

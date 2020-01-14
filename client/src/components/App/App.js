@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   BrowserRouter as Router,
   Route,
@@ -14,7 +14,14 @@ import RegisterModal from '../RegisterModal';
 import LoginModal from '../LoginModal';
 import Sidebar from '../Sidebar';
 
-export const App = () => {
+export const App = ({ refreshToken }) => {
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      refreshToken();
+    }
+  }, []);
+
   return (
     <div className={styles.app}>
       <Router>
