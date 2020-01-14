@@ -41,6 +41,26 @@ export const refreshToken = () => async dispatch => {
   }
 };
 
+export const getSession = () => async dispatch => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await fetch('/api/users', {
+      method: 'GET',
+      headers: {
+        authorization: `Bearer ${token}`
+      }
+    });
+    if (response.ok) {
+      const responseData = await response.json();
+      dispatch(receiveSession(responseData.user));
+    } else {
+      // Error
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const initialState = {
   session: {},
   auth: false,

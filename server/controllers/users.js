@@ -30,18 +30,17 @@ const register = async (req, res, next) => {
       .table('users')
       .insert({ name, email, password: hashedPassword }, '*');
     const accessToken = await createToken(
-      { userId: newUser.id },
+      { userId: newUser[0].id },
       process.env.ACCESS_SECRET,
       process.env.ACCESS_EXPIRATION
     );
     const refreshToken = await createToken(
-      { userId: newUser.id },
+      { userId: newUser[0].id },
       process.env.REFRESH_SECRET,
       process.env.REFRESH_EXPIRATION
     );
     res.cookie('token', refreshToken, {
       httpOnly: true,
-      path: '/refresh_token',
       expires: new Date(Date.now() + parseInt(process.env.REFRESH_EXPIRATION))
     });
     const { password: omit, ...userWithoutPassword } = newUser[0];
@@ -81,7 +80,6 @@ const login = async (req, res, next) => {
     );
     res.cookie('token', refreshToken, {
       httpOnly: true,
-      path: '/api/users/refresh_token',
       expires: new Date(Date.now() + parseInt(process.env.REFRESH_EXPIRATION))
     });
     const { password: omit, ...userWithoutPassword } = user;
@@ -95,7 +93,7 @@ const login = async (req, res, next) => {
 };
 
 const logout = async (req, res) => {
-  res.clearCookie('token', { path: '/api/users/refresh_token' });
+  res.clearCookie('token');
   res.status(200).json({
     message: 'Logged Out'
   });
@@ -107,7 +105,9 @@ const refreshToken = async (req, res, next) => {
     if (!token) {
       throw new AppError('Refresh token is required', 499);
     }
+    console.log('TOKEN', token);
     const decodedToken = await jwt.verify(token, process.env.REFRESH_SECRET);
+    console.log('DECODED TOKEN', decodedToken);
     const user = await database
       .table('users')
       .select()
@@ -128,9 +128,18 @@ const refreshToken = async (req, res, next) => {
   }
 };
 
+const getSession = async (req, res, next) => {
+  try {
+    res.status(200).json({ user: req.user });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   register,
   login,
   logout,
-  refreshToken
+  refreshToken,
+  getSession
 };

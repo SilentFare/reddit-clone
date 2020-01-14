@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 
 const AppError = require('../utilities/appError');
 
-module.exports = (req, res, next) => {
+module.exports = async (req, res, next) => {
   try {
     const { authorization } = req.headers;
     if (!authorization) {
@@ -10,13 +10,15 @@ module.exports = (req, res, next) => {
     }
     const token = authorization.split(' ')[1];
     if (!token) {
-      throw new AppError('Invalid token', 403)
+      throw new AppError('Invalid token', 403);
     }
+    console.log(authorization, token);
     const decodedToken = await jwt.verify(token, process.env.ACCESS_SECRET);
+    console.log(decodedToken);
     req.user = decodedToken;
     next();
   } catch (err) {
     const error = new AppError('Authentication failed', 403);
-    next(error);
+    next(err);
   }
 };

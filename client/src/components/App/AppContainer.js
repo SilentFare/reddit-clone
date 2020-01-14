@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 
 import { App } from './App';
-import { refreshToken } from '../../ducks/user';
+import { refreshToken, getSession } from '../../ducks/user';
 const mapStateToProps = state => ({});
 
-const mapDispatchToProps = { refreshToken };
+const mapDispatchToProps = { refreshToken, getSession };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

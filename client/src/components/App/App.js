@@ -14,11 +14,17 @@ import RegisterModal from '../RegisterModal';
 import LoginModal from '../LoginModal';
 import Sidebar from '../Sidebar';
 
-export const App = ({ refreshToken }) => {
+export const App = ({ refreshToken, getSession }) => {
   useEffect(() => {
+    const momo = async () => {
+      await refreshToken();
+      await getSession();
+    };
     const token = localStorage.getItem('token');
     if (!token) {
-      refreshToken();
+      momo();
+    } else {
+      getSession();
     }
   }, []);
 
