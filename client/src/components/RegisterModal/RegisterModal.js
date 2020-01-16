@@ -23,14 +23,24 @@ export const RegisterModal = ({
     toggleLogin();
   };
 
+  const clearForm = () => {
+    setName('');
+    setEmail('');
+    setPassword('');
+    setConfirmPassword('');
+  };
+
   const handleFormSubmit = event => {
     event.preventDefault();
-    register({
-      name,
-      email,
-      password,
-      confirmPassword
-    });
+    register(
+      {
+        name,
+        email,
+        password,
+        confirmPassword
+      },
+      clearForm
+    );
   };
 
   return (

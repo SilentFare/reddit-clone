@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import decode from 'jwt-decode';
 import {
   BrowserRouter as Router,
   Route,
@@ -16,17 +17,21 @@ import Sidebar from '../Sidebar';
 
 export const App = ({ refreshToken, getSession }) => {
   useEffect(() => {
-    const momo = async () => {
-      await refreshToken();
-      await getSession();
+    const auth = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        await refreshToken();
+        await getSession();
+      } else {
+        const decodedToken = decode(token);
+        if (decodedToken.exp < Date.now() / 1000) {
+          await refreshToken();
+        }
+        await getSession();
+      }
     };
-    const token = localStorage.getItem('token');
-    if (!token) {
-      momo();
-    } else {
-      getSession();
-    }
-  }, []);
+    auth();
+  }, [refreshToken, getSession]);
 
   return (
     <div className={styles.app}>
