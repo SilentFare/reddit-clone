@@ -21,14 +21,14 @@ export const App = ({ refreshToken, getSession }) => {
       const token = localStorage.getItem('token');
       if (!token) {
         await refreshToken();
-        await getSession();
       } else {
         const decodedToken = decode(token);
+        console.log('Expired', decodedToken.exp < Date.now() / 1000);
         if (decodedToken.exp < Date.now() / 1000) {
           await refreshToken();
         }
-        await getSession();
       }
+      await getSession();
     };
     auth();
   }, [refreshToken, getSession]);

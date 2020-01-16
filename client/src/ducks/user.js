@@ -63,7 +63,6 @@ export const login = (data, clearForm) => async dispatch => {
   } catch (error) {
     console.log(error);
   }
-  dispatch(toggleFetching());
 };
 
 export const logout = () => async dispatch => {
@@ -91,7 +90,8 @@ export const refreshToken = () => async dispatch => {
       const responseData = await response.json();
       localStorage.setItem('token', responseData.token);
     } else {
-      // No new access token
+      localStorage.removeItem('token');
+      dispatch(logout());
     }
   } catch (error) {
     console.log(error);
@@ -101,23 +101,26 @@ export const refreshToken = () => async dispatch => {
 export const getSession = () => async dispatch => {
   try {
     const token = localStorage.getItem('token');
-    const response = await fetch('/api/users', {
-      method: 'GET',
-      headers: {
-        authorization: `Bearer ${token}`
+    console.log('Token', token);
+    if (token) {
+      const response = await fetch('/api/users', {
+        method: 'GET',
+        headers: {
+          authorization: `Bearer ${token}`
+        }
+      });
+      console.log(response);
+      if (response.ok) {
+        const responseData = await response.json();
+        dispatch(receiveSession(responseData.user));
+      } else {
+        // Error
       }
-    });
-    console.log(response);
-    if (response.ok) {
-      const responseData = await response.json();
-      dispatch(receiveSession(responseData.user));
-    } else {
-      // Error
     }
   } catch (error) {
     console.log(error);
   }
-  dispatch(toggleFetching());
+  // dispatch(toggleFetching());
 };
 
 const initialState = {
@@ -135,9 +138,9 @@ export const user = (state = initialState, action) => {
       };
     case RECEIVE_SESSION:
       return {
-        ...state,
         session: action.session,
-        auth: !!action.session
+        auth: !!action.session,
+        fetching: false
       };
     case CLEAR_SESSION:
       return {
