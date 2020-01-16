@@ -5,7 +5,7 @@ import Modal from '../Modal';
 import Input from '../Input';
 import Button from '../Button';
 
-export const LoginModal = ({ show, toggleLogin, toggleRegister }) => {
+export const LoginModal = ({ show, toggleLogin, toggleRegister, login }) => {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
 
@@ -16,8 +16,21 @@ export const LoginModal = ({ show, toggleLogin, toggleRegister }) => {
     toggleRegister();
   };
 
+  const clearForm = () => {
+    setName('');
+    setPassword('');
+  };
+
   const handleFormSubmit = event => {
     event.preventDefault();
+
+    login(
+      {
+        name,
+        password
+      },
+      clearForm
+    );
   };
 
   return (

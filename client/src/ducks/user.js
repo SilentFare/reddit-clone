@@ -43,7 +43,7 @@ export const register = (data, clearForm) => async dispatch => {
   dispatch(toggleFetching());
 };
 
-export const login = data => async dispatch => {
+export const login = (data, clearForm) => async dispatch => {
   dispatch(toggleFetching());
   try {
     const response = await fetch('/api/users/login', {
@@ -58,6 +58,7 @@ export const login = data => async dispatch => {
       localStorage.setItem('token', responseData.token);
       dispatch(receiveSession(responseData.user));
       dispatch(toggleLogin());
+      clearForm();
     }
   } catch (error) {
     console.log(error);
