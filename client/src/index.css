@@ -19,4 +19,5 @@ body {
   --black: rgb(15, 15, 15);
   --lighter-black: rgb(26, 28, 34);
   --grey: rgb(37, 38, 44);
+  --lighter-grey: rgb(63, 65, 75);
 }

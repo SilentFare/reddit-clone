@@ -23,7 +23,7 @@ export const Sidebar = ({
       </div>
       <div className={styles.sidebar__communities}>
         {Object.values(communities).map(community => (
-          <CommunityLink name={community.name} />
+          <CommunityLink key={community.name} name={community.name} />
         ))}
       </div>
     </aside>

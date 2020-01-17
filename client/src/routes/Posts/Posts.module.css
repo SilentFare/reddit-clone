@@ -1,4 +1,12 @@
 .posts {
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1em;
   background: var(--lighter-black);
+}
+
+.posts > *:not(:last-child) {
+  margin-bottom: 1em;
 }
