@@ -5,7 +5,8 @@ import { toggleSidebar } from '../../ducks/modals';
 import { fetchCommunities } from '../../ducks/communities';
 
 const mapStateToProps = state => ({
-  show: state.modals.sidebar
+  show: state.modals.sidebar,
+  communities: state.communities.byId
 });
 
 const mapDispatchToProps = { toggleSidebar, fetchCommunities };

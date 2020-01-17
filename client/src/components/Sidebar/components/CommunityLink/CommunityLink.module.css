@@ -1,0 +1,18 @@
+.community__link {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 1em;
+  color: white;
+  border-radius: 3px;
+  border: 1px solid transparent;
+  text-decoration: none;
+}
+
+.community__link:hover {
+  border: 1px solid var(--blue);
+}
+
+.community__link_active {
+  border: 1px solid var(--blue);
+}

@@ -40,7 +40,6 @@ export const register = (data, clearForm) => async dispatch => {
   } catch (error) {
     console.log(error);
   }
-  dispatch(toggleFetching());
 };
 
 export const login = (data, clearForm) => async dispatch => {

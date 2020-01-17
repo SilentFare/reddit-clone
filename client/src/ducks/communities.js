@@ -1,9 +1,15 @@
 // Action types
 const TOGGLE_COMMUNITIES_FETCHING = 'TOGGLE_COMMUNITIES_FETCHING';
+const RECEIVE_COMMUNITIES = 'RECEIVE_COMMUNITIES';
 
 // Action creators
 const toggleCommunitiesFetching = () => ({
   type: TOGGLE_COMMUNITIES_FETCHING
+});
+
+const receiveCommunities = communities => ({
+  type: RECEIVE_COMMUNITIES,
+  communities
 });
 
 export const fetchCommunities = () => async dispatch => {
@@ -14,15 +20,15 @@ export const fetchCommunities = () => async dispatch => {
     });
     if (response.ok) {
       const responseData = await response.json();
-      console.log('Data', responseData);
+      dispatch(receiveCommunities(responseData.communities));
     }
   } catch (error) {
     console.log(error);
   }
-  dispatch(toggleCommunitiesFetching());
 };
 
 const initialState = {
+  byId: {},
   fetching: false
 };
 // Reducer
@@ -32,6 +38,16 @@ export const communities = (state = initialState, action) => {
       return {
         ...state,
         fetching: !state.fetching
+      };
+    case RECEIVE_COMMUNITIES:
+      const communities = action.communities.reduce((obj, com) => {
+        obj[com.id] = com;
+        return obj;
+      }, {});
+      return {
+        ...state,
+        byId: communities,
+        fetching: false
       };
     default:
       return state;

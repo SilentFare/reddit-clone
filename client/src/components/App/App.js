@@ -42,7 +42,7 @@ export const App = ({ refreshToken, getSession }) => {
         <Sidebar />
         <main className={styles.main}>
           <Switch>
-            <Route path='/' exact>
+            <Route path={['/', '/r/:community']} exact>
               <Posts />
             </Route>
             <Route path='/discussion'>
