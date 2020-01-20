@@ -1,3 +1,3 @@
-import { Posts } from './Posts';
+import PostsContainer from './PostsContainer';
 
-export default Posts;
+export default PostsContainer;

@@ -17,11 +17,18 @@ export const PostCard = () => {
       </div>
       <div className={styles.post__card__main}>
         <div className={styles.post__card__header}>
-          <Link className={styles.post__card__community}>r/Askreddit</Link>
+          <Link to={`/r/Askreddit`} className={styles.post__card__community}>
+            r/Askreddit
+          </Link>
           <span className={styles.post__card__author}>
-            Posted by <Link className={styles.post__card__user}>u/Dollar</Link>
+            Posted by{' '}
+            <Link to={`/u/Dollar`} className={styles.post__card__user}>
+              u/Dollar
+            </Link>
           </span>
-          <Link className={styles.post__card__time}>2 hours ago</Link>
+          <Link to='/' className={styles.post__card__time}>
+            2 hours ago
+          </Link>
         </div>
         <div className={styles.post__card__content}>
           <span className={styles.post__card__title}>

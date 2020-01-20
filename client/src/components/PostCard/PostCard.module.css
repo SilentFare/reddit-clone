@@ -1,6 +1,7 @@
 .post__card {
   display: flex;
   max-width: 50em;
+  color: var(--white);
   background: var(--lighter-grey);
   border-radius: 3px;
   border: 1px solid transparent;
@@ -93,11 +94,13 @@
 
 .post__card__button {
   display: flex;
+  color: var(--white);
   padding: 0.5em;
+  cursor: pointer;
   border-radius: 3px;
   border: none;
   background: none;
-  cursor: pointer;
+  outline: none;
 }
 
 .post__card__button:hover {

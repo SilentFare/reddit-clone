@@ -12,7 +12,7 @@ exports.up = function(knex) {
       .inTable('communities')
       .notNullable();
     table.string('title').notNullable();
-    table.string('text');
+    table.string('text', 40000);
     table.timestamps(true, true);
   });
 };
