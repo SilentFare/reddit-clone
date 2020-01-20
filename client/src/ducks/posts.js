@@ -5,9 +5,8 @@ const INVALIDATE_POSTS = 'INVALIDATE_POSTS';
 const RECEIVE_POSTS = 'RECEIVE_POSTS';
 
 // Action creators
-export const togglePostsFetching = community => ({
-  type: TOGGLE_POSTS_FETCHING,
-  community
+export const togglePostsFetching = () => ({
+  type: TOGGLE_POSTS_FETCHING
 });
 
 export const selectCommunity = community => ({
@@ -27,17 +26,14 @@ export const invalidatePosts = community => ({
 });
 
 export const fetchPosts = community => async dispatch => {
-  dispatch(togglePostsFetching(community));
   try {
-    const response = await fetch(
-      `/api/posts/${community ? community.id : ''}`,
-      {
-        method: 'GET'
-      }
-    );
+    const response = await fetch(`/api/posts/${community ? community : ''}`, {
+      method: 'GET'
+    });
     if (response.ok) {
       const responseData = await response.json();
       dispatch(receivePosts(community, responseData.posts));
+      dispatch(togglePostsFetching());
     }
   } catch (error) {
     console.log(error);
@@ -45,17 +41,8 @@ export const fetchPosts = community => async dispatch => {
 };
 
 // Community posts reducer
-const community = (
-  state = { byId: {}, invalidate: false, fetching: false },
-  action
-) => {
+const community = (state = { byId: {}, invalidate: false }, action) => {
   switch (action.type) {
-    case TOGGLE_POSTS_FETCHING:
-      return {
-        ...state,
-        fetching: !state.fetching,
-        invalidate: false
-      };
     case RECEIVE_POSTS:
       const posts = action.posts.reduce((obj, post) => {
         obj[post.id] = post;
@@ -64,7 +51,6 @@ const community = (
       return {
         ...state,
         invalidate: false,
-        fetching: false,
         byId: posts
       };
     case INVALIDATE_POSTS:
@@ -78,7 +64,8 @@ const community = (
 };
 
 const initialState = {
-  byCommunity: {}
+  byCommunity: {},
+  fetching: true
 };
 // Reducer
 export const posts = (state = initialState, action) => {
@@ -89,6 +76,10 @@ export const posts = (state = initialState, action) => {
         selectedCommunity: action.community
       };
     case TOGGLE_POSTS_FETCHING:
+      return {
+        ...state,
+        fetching: !state.fetching
+      };
     case RECEIVE_POSTS:
     case INVALIDATE_POSTS:
       if (action.community) {
@@ -96,8 +87,8 @@ export const posts = (state = initialState, action) => {
           ...state,
           byCommunity: {
             ...state.byCommunity,
-            [action.community.id]: community(
-              state.byCommunity[action.community.id],
+            [action.community]: community(
+              state.byCommunity[action.community],
               action
             )
           }
