@@ -5,8 +5,9 @@ const INVALIDATE_POSTS = 'INVALIDATE_POSTS';
 const RECEIVE_POSTS = 'RECEIVE_POSTS';
 
 // Action creators
-export const togglePostsFetching = () => ({
-  type: TOGGLE_POSTS_FETCHING
+export const togglePostsFetching = community => ({
+  type: TOGGLE_POSTS_FETCHING,
+  community
 });
 
 export const selectCommunity = community => ({
@@ -30,10 +31,10 @@ export const fetchPosts = community => async dispatch => {
     const response = await fetch(`/api/posts/${community ? community : ''}`, {
       method: 'GET'
     });
+    console.log('RESPONSE', response);
     if (response.ok) {
       const responseData = await response.json();
       dispatch(receivePosts(community, responseData.posts));
-      dispatch(togglePostsFetching());
     }
   } catch (error) {
     console.log(error);
@@ -41,8 +42,16 @@ export const fetchPosts = community => async dispatch => {
 };
 
 // Community posts reducer
-const community = (state = { byId: {}, invalidate: false }, action) => {
+const community = (
+  state = { byId: {}, invalidate: false, fetching: true },
+  action
+) => {
   switch (action.type) {
+    case TOGGLE_POSTS_FETCHING:
+      return {
+        ...state,
+        fetching: !state.fetching
+      };
     case RECEIVE_POSTS:
       const posts = action.posts.reduce((obj, post) => {
         obj[post.id] = post;
@@ -51,6 +60,7 @@ const community = (state = { byId: {}, invalidate: false }, action) => {
       return {
         ...state,
         invalidate: false,
+        fetching: false,
         byId: posts
       };
     case INVALIDATE_POSTS:
@@ -64,8 +74,7 @@ const community = (state = { byId: {}, invalidate: false }, action) => {
 };
 
 const initialState = {
-  byCommunity: {},
-  fetching: true
+  byCommunity: {}
 };
 // Reducer
 export const posts = (state = initialState, action) => {
@@ -76,10 +85,6 @@ export const posts = (state = initialState, action) => {
         selectedCommunity: action.community
       };
     case TOGGLE_POSTS_FETCHING:
-      return {
-        ...state,
-        fetching: !state.fetching
-      };
     case RECEIVE_POSTS:
     case INVALIDATE_POSTS:
       if (action.community) {

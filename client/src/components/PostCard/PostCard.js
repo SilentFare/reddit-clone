@@ -18,12 +18,12 @@ export const PostCard = ({ community, user, title, text, created }) => {
       </div>
       <div className={styles.post__card__main}>
         <div className={styles.post__card__header}>
-          <Link to={`/r/Askreddit`} className={styles.post__card__community}>
+          <Link to={`/r/${community}`} className={styles.post__card__community}>
             {`r/${community}`}
           </Link>
           <span className={styles.post__card__author}>
             Posted by{' '}
-            <Link to={`/u/Dollar`} className={styles.post__card__user}>
+            <Link to={`/u/${user}`} className={styles.post__card__user}>
               {`u/${user}`}
             </Link>
           </span>

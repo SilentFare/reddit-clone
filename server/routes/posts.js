@@ -9,7 +9,8 @@ router
   .route('/')
   .get(posts.getAll)
   .post(protect, posts.create);
-
-router.get('/:community', posts.getByCommunity);
+router.post('/upvote', protect, posts.upvote);
+router.post('/downvote', protect, posts.downvote);
+router.get('/community/:communityName', posts.getByCommunity);
 
 module.exports = router;
