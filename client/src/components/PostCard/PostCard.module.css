@@ -1,6 +1,6 @@
 .post__card {
   display: flex;
-  max-width: 50em;
+  max-width: 40em;
   color: var(--white);
   background: var(--lighter-grey);
   border-radius: 3px;
@@ -23,7 +23,30 @@
 }
 
 .post__card__votes > *:not(:last-child) {
-  margin-bottom: 0.5em;
+  margin-bottom: 0.1em;
+}
+
+.post__card__vote {
+  font-size: 1rem;
+  color: var(--white);
+  padding: 0.3em;
+  border-radius: 3px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  outline: none;
+}
+
+.post__card__vote:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.post__card__vote:first-child:hover {
+  color: var(--red);
+}
+
+.post__card__vote:last-child:hover {
+  color: var(--blue);
 }
 
 .post__card__upvotes {

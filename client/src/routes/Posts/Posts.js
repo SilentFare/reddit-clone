@@ -17,10 +17,12 @@ export const Posts = ({ fetchPosts, posts }) => {
         {Object.values(posts.byCommunity[community].byId).map(post => (
           <PostCard
             key={post.id}
+            id={post.id}
             community={post.community}
             user={post.user}
             title={post.title}
             text={post.text}
+            upvotes={post.upvotes}
             created={post.created_at}
           />
         ))}
@@ -34,10 +36,12 @@ export const Posts = ({ fetchPosts, posts }) => {
         {Object.values(posts.all.byId).map(post => (
           <PostCard
             key={post.id}
+            id={post.id}
             community={post.community}
             user={post.user}
             title={post.title}
             text={post.text}
+            upvotes={post.upvotes}
             created={post.created_at}
           />
         ))}

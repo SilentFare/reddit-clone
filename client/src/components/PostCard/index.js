@@ -1,3 +1,3 @@
-import { PostCard } from './PostCard';
+import PostCardContainer from './PostCardContainer';
 
-export default PostCard;
+export default PostCardContainer;

@@ -28,13 +28,58 @@ export const invalidatePosts = community => ({
 
 export const fetchPosts = community => async dispatch => {
   try {
-    const response = await fetch(`/api/posts/${community ? community : ''}`, {
+    const url = `/api/posts/${community ? `community/${community}` : ''}`;
+    const response = await fetch(url, {
       method: 'GET'
     });
     console.log('RESPONSE', response);
     if (response.ok) {
       const responseData = await response.json();
       dispatch(receivePosts(community, responseData.posts));
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const upvote = post_id => async dispatch => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await fetch('/api/posts/upvote', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        post_id
+      })
+    });
+    if (response.ok) {
+      const responseData = await response.json();
+      console.log(responseData);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const downvote = post_id => async dispatch => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await fetch('/api/posts/downvote', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        post_id
+      })
+    });
+    if (response.ok) {
+      const responseData = await response.json();
+      console.log(responseData);
     }
   } catch (error) {
     console.log(error);

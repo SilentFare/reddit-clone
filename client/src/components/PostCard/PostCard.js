@@ -6,14 +6,34 @@ import { MdChatBubble } from 'react-icons/md';
 
 import styles from './PostCard.module.css';
 
-export const PostCard = ({ community, user, title, text, created }) => {
+export const PostCard = ({
+  id,
+  community,
+  user,
+  title,
+  text,
+  upvotes,
+  created,
+  upvote,
+  downvote
+}) => {
   return (
     <div className={styles.post__card}>
       <div className={styles.post__card__aside}>
         <div className={styles.post__card__votes}>
-          <FaArrowUp />
-          <span className={styles.post__card__upvotes}>7k</span>
-          <FaArrowDown />
+          <button
+            className={styles.post__card__vote}
+            onClick={() => upvote(id)}
+          >
+            <FaArrowUp />
+          </button>
+          <span className={styles.post__card__upvotes}>{upvotes}</span>
+          <button
+            className={styles.post__card__vote}
+            onClick={() => downvote(id)}
+          >
+            <FaArrowDown />
+          </button>
         </div>
       </div>
       <div className={styles.post__card__main}>
