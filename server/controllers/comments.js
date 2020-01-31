@@ -35,7 +35,13 @@ const getByPost = async (req, res, next) => {
   }
 };
 
-const upvote = async (req, res, next) => {};
+const upvote = async (req, res, next) => {
+  const { comment_id } = req.body;
+  try {
+  } catch (error) {
+    next(error);
+  }
+};
 
 const downvote = async (req, res, next) => {};
 

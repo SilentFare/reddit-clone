@@ -1,0 +1,32 @@
+.create__post {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: var(--lighter-black);
+}
+
+.post__editor {
+  border-radius: 3px;
+  background: var(--white);
+  overflow: hidden;
+}
+
+.post__editor__toolbar {
+  display: flex;
+  padding: 0.5em;
+  background: var(--blue);
+}
+
+.post__editor__toolbar > *:not(:last-child) {
+  margin-right: 1rem;
+}
+
+.editor {
+  padding: 1em;
+}
+
+.vertical__line {
+  width: 1px;
+  background: white;
+}

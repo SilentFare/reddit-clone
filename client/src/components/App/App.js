@@ -14,6 +14,7 @@ import Header from '../Header';
 import RegisterModal from '../RegisterModal';
 import LoginModal from '../LoginModal';
 import Sidebar from '../Sidebar';
+import CreatePost from '../../routes/CreatePost';
 
 export const App = ({ refreshToken, getSession }) => {
   useEffect(() => {
@@ -47,6 +48,9 @@ export const App = ({ refreshToken, getSession }) => {
             </Route>
             <Route path='/discussion'>
               <Discussion />
+            </Route>
+            <Route path='/submit'>
+              <CreatePost />
             </Route>
             <Redirect to='/' />
           </Switch>

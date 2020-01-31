@@ -89,6 +89,7 @@ export const refreshToken = () => async dispatch => {
       const responseData = await response.json();
       localStorage.setItem('token', responseData.token);
     } else {
+      console.log('DUCK', response);
       localStorage.removeItem('token');
       dispatch(logout());
     }

@@ -1,0 +1,12 @@
+.toolbar__button {
+  display: flex;
+  padding: 0.5em;
+  border-radius: 3px;
+  cursor: pointer;
+  border: none;
+}
+
+.toolbar__button_active {
+  background: var(--black);
+  color: white;
+}

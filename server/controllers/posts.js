@@ -68,11 +68,24 @@ const getByCommunity = async (req, res, next) => {
         'communities.name as community',
         'posts.title',
         'posts.text',
+        'x.upvotes',
         'posts.created_at',
         'posts.updated_at'
       )
       .leftJoin('users', 'posts.user_id', 'users.id')
       .leftJoin('communities', 'posts.community_id', 'communities.id')
+      .leftJoin(
+        database
+          .table('post_votes')
+          .select(
+            'post_id',
+            database.raw('SUM(CASE WHEN vote THEN 1 ELSE -1 END) as upvotes')
+          )
+          .groupBy('post_id')
+          .as('x'),
+        'x.post_id',
+        'posts.id'
+      )
       .where({ 'communities.name': communityName });
     res.status(200).json({ posts });
   } catch (error) {

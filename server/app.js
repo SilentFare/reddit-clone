@@ -35,6 +35,10 @@ app.use('/api', limiter);
 
 // REST API routes
 app.use('/api', routes);
+// Handle all not defined routes
+app.all('*', (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
+});
 // Global error handler
 app.use((error, req, res, next) => {
   if (res.headerSent) {
@@ -44,10 +48,6 @@ app.use((error, req, res, next) => {
   res.json({
     message: error.message || 'An unknown error occurred'
   });
-});
-// Handle all not defined routes
-app.all('*', (req, res, next) => {
-  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 
 module.exports = app;

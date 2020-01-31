@@ -18,9 +18,21 @@
 }
 
 .header__left > *:not(:last-child) {
-  margin-right: 1em;
+  margin-right: 2em;
+}
+
+.header__right {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .header__right > *:not(:last-child) {
-  margin-right: 1em;
+  margin-right: 1.5em;
+}
+
+.header__icon {
+  font-size: 1.5rem;
+  color: var(--blue);
+  cursor: pointer;
 }

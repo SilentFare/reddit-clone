@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 import styles from './Header.module.css';
 import Button from '../Button';
 import HamburgerButton from '../HamburgerButton';
 import Logo from '../Logo';
-import Placeholder from '../Placeholder';
+import { FaEdit, FaUser } from 'react-icons/fa';
 
 export const Header = ({
   toggleRegister,
@@ -24,7 +25,15 @@ export const Header = ({
       {!fetching && (
         <div className={styles.header__right}>
           {auth ? (
-            <Button label='Logout' onClick={logout} />
+            <>
+              <Link to='/submit'>
+                <FaEdit className={styles.header__icon} />
+              </Link>
+              <Link to='/user'>
+                <FaUser className={styles.header__icon} />
+              </Link>
+              <Button label='Logout' onClick={logout} />
+            </>
           ) : (
             <>
               <Button label='Register' onClick={toggleRegister} />
