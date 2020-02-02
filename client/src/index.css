@@ -23,3 +23,13 @@ body {
   --white: rgb(215, 218, 220);
   --red: rgb(255, 81, 81);
 }
+
+div.DraftEditor-root {
+  overflow-y: auto;
+}
+
+div.DraftEditor-editorContainer,
+div.public-DraftEditor-content {
+  height: 10em;
+  padding: 0.5em;
+}

@@ -4,7 +4,8 @@ import {
   EditorState,
   RichUtils,
   getDefaultKeyBinding,
-  KeyBindingUtil
+  KeyBindingUtil,
+  convertToRaw
 } from 'draft-js';
 import {
   FaBold,
@@ -20,9 +21,12 @@ import {
 
 import styles from './CreatePost.module.css';
 import ToolbarButton from '../../components/ToolbarButton';
+import Button from '../../components/Button';
+import Dropdown from '../../components/Dropdown';
 
-export const CreatePost = () => {
+export const CreatePost = ({ createPost }) => {
   const [editor, setEditor] = useState(EditorState.createEmpty());
+  const [title, setTitle] = useState('');
 
   const onChange = editorState => setEditor(editorState);
 
@@ -103,86 +107,116 @@ export const CreatePost = () => {
     return getDefaultKeyBinding(event);
   };
 
+  const handleSubmit = event => {
+    event.preventDefault();
+
+    const data = {
+      title
+    };
+    if (editor.getCurrentContent().hasText()) {
+      data.text = convertToRaw(editor.getCurrentContent());
+    }
+    createPost(data);
+  };
+
   return (
     <div className={styles.create__post}>
-      <div className={styles.post__editor}>
-        <div className={styles.post__editor__toolbar}>
-          <ToolbarButton
-            style='BOLD'
-            onMouseDown={toggleInlineStyle}
-            editorState={editor}
-          >
-            <FaBold />
-          </ToolbarButton>
-          <ToolbarButton
-            style='ITALIC'
-            onMouseDown={toggleInlineStyle}
-            editorState={editor}
-          >
-            <FaItalic />
-          </ToolbarButton>
-          <ToolbarButton
-            style='UNDERLINE'
-            onMouseDown={toggleInlineStyle}
-            editorState={editor}
-          >
-            <FaUnderline />
-          </ToolbarButton>
-          <ToolbarButton
-            style='STRIKETHROUGH'
-            onMouseDown={toggleInlineStyle}
-            editorState={editor}
-          >
-            <FaStrikethrough />
-          </ToolbarButton>
-          <ToolbarButton
-            style='CODE'
-            onMouseDown={toggleInlineStyle}
-            editorState={editor}
-          >
-            <FaCode />
-          </ToolbarButton>
-          <div className={styles.vertical__line} />
-          <ToolbarButton
-            style='header-one'
-            onMouseDown={toggleBlockType}
-            editorState={editor}
-            block={true}
-          >
-            <FaHeading />
-          </ToolbarButton>
-          <ToolbarButton
-            style='blockquote'
-            onMouseDown={toggleBlockType}
-            editorState={editor}
-            block={true}
-          >
-            <FaQuoteLeft />
-          </ToolbarButton>
-          <ToolbarButton
-            style='unordered-list-item'
-            onMouseDown={toggleBlockType}
-            editorState={editor}
-            block={true}
-          >
-            <FaListUl />
-          </ToolbarButton>
-          <ToolbarButton
-            style='ordered-list-item'
-            onMouseDown={toggleBlockType}
-            editorState={editor}
-            block={true}
-          >
-            <FaListOl />
-          </ToolbarButton>
+      <form className={styles.post__form} onSubmit={handleSubmit}>
+        <Dropdown />
+        <div className={styles.title__container}>
+          <label htmlFor='title' className={styles.label}>
+            Title
+          </label>
+          <textarea
+            id='title'
+            className={styles.post__form__title}
+            onChange={event => setTitle(event.target.value)}
+            value={title}
+          />
         </div>
-        <Editor
-          editorState={editor}
-          onChange={onChange}
-          handleKeyCommand={handleKeyCommand}
-          keyBindingFn={keyBindingFunction}
-        />
-      </div>
+        <div className={styles.editor__container}>
+          <label className={styles.label}>Text</label>
+          <div className={styles.post__editor}>
+            <div className={styles.post__editor__toolbar}>
+              <ToolbarButton
+                style='BOLD'
+                onMouseDown={toggleInlineStyle}
+                editorState={editor}
+              >
+                <FaBold />
+              </ToolbarButton>
+              <ToolbarButton
+                style='ITALIC'
+                onMouseDown={toggleInlineStyle}
+                editorState={editor}
+              >
+                <FaItalic />
+              </ToolbarButton>
+              <ToolbarButton
+                style='UNDERLINE'
+                onMouseDown={toggleInlineStyle}
+                editorState={editor}
+              >
+                <FaUnderline />
+              </ToolbarButton>
+              <ToolbarButton
+                style='STRIKETHROUGH'
+                onMouseDown={toggleInlineStyle}
+                editorState={editor}
+              >
+                <FaStrikethrough />
+              </ToolbarButton>
+              <ToolbarButton
+                style='CODE'
+                onMouseDown={toggleInlineStyle}
+                editorState={editor}
+              >
+                <FaCode />
+              </ToolbarButton>
+              <div className={styles.vertical__line} />
+              <ToolbarButton
+                style='header-one'
+                onMouseDown={toggleBlockType}
+                editorState={editor}
+                block={true}
+              >
+                <FaHeading />
+              </ToolbarButton>
+              <ToolbarButton
+                style='blockquote'
+                onMouseDown={toggleBlockType}
+                editorState={editor}
+                block={true}
+              >
+                <FaQuoteLeft />
+              </ToolbarButton>
+              <ToolbarButton
+                style='unordered-list-item'
+                onMouseDown={toggleBlockType}
+                editorState={editor}
+                block={true}
+              >
+                <FaListUl />
+              </ToolbarButton>
+              <ToolbarButton
+                style='ordered-list-item'
+                onMouseDown={toggleBlockType}
+                editorState={editor}
+                block={true}
+              >
+                <FaListOl />
+              </ToolbarButton>
+            </div>
+            <Editor
+              editorState={editor}
+              onChange={onChange}
+              handleKeyCommand={handleKeyCommand}
+              keyBindingFn={keyBindingFunction}
+            />
+          </div>
+        </div>
+        <Button type='submit' label='Submit' />
+      </form>
     </div>
   );
 };

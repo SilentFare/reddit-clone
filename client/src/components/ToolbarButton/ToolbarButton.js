@@ -21,6 +21,7 @@ export const ToolbarButton = ({
       className={`${styles.toolbar__button} ${(block
         ? actives === style
         : actives.has(style)) && styles.toolbar__button_active}`}
+      onClick={e => e.preventDefault()}
     >
       {children}
     </button>

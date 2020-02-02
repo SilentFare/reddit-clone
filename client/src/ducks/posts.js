@@ -86,6 +86,26 @@ export const downvote = post_id => async dispatch => {
   }
 };
 
+export const createPost = data => async dispatch => {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await fetch('/api/posts', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(data)
+    });
+    if (response.ok) {
+      const responseData = await response.json();
+      console.log('Create Post', responseData);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 // Community posts reducer
 const community = (
   state = { byId: {}, invalidate: false, fetching: true },
