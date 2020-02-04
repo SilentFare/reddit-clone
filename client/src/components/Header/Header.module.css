@@ -9,6 +9,7 @@
   justify-content: space-between;
   padding: 0 2em;
   background: var(--black);
+  z-index: 1;
 }
 
 .header__left {

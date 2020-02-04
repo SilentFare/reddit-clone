@@ -3,7 +3,9 @@ import { connect } from 'react-redux';
 import { CreatePost } from './CreatePost';
 import { createPost } from '../../ducks/posts';
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+  communities: state.communities.byId
+});
 
 const mapDispatchToProps = { createPost };
 

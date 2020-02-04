@@ -24,7 +24,10 @@ body {
   --red: rgb(255, 81, 81);
 }
 
+/* Draft.js */
+
 div.DraftEditor-root {
+  position: relative;
   overflow-y: auto;
 }
 
@@ -32,4 +35,11 @@ div.DraftEditor-editorContainer,
 div.public-DraftEditor-content {
   height: 10em;
   padding: 0.5em;
+}
+
+.public-DraftEditorPlaceholder-inner {
+  position: absolute;
+  padding: 1em;
+  color: grey;
+  pointer-events: none;
 }

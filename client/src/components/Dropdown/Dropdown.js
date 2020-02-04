@@ -3,7 +3,7 @@ import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
 
 import styles from './Dropdown.module.css';
 
-export const Dropdown = () => {
+export const Dropdown = ({ options, placeholder, selected, setSelected }) => {
   const [show, setShow] = useState(false);
 
   const inputRef = useRef();
@@ -11,10 +11,16 @@ export const Dropdown = () => {
   return (
     <div className={styles.dropdown}>
       <input
+        type='text'
         ref={inputRef}
+        placeholder={placeholder}
         className={styles.dropdown__input}
-        onBlur={() => setShow(false)}
         onFocus={() => setShow(true)}
+        onBlur={() => {
+          setShow(false);
+        }}
+        value={selected}
+        onChange={event => setSelected(event.target.value)}
       />
       {show ? (
         <IoMdArrowDropup
@@ -29,9 +35,22 @@ export const Dropdown = () => {
       )}
       {show && (
         <ul className={styles.dropdown__list}>
-          <li>Jokes</li>
-          <li>Askreddit</li>
-          <li>Javascript</li>
+          {options
+            .filter(opt =>
+              opt.name.toUpperCase().includes(selected.toUpperCase())
+            )
+            .map(opt => (
+              <li
+                key={opt.name}
+                className={styles.dropdown__option}
+                onMouseDown={() => {
+                  setSelected(opt.name);
+                  setShow(false);
+                }}
+              >
+                {opt.name}
+              </li>
+            ))}
         </ul>
       )}
     </div>

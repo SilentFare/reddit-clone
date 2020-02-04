@@ -24,9 +24,10 @@ import ToolbarButton from '../../components/ToolbarButton';
 import Button from '../../components/Button';
 import Dropdown from '../../components/Dropdown';
 
-export const CreatePost = ({ createPost }) => {
+export const CreatePost = ({ createPost, communities }) => {
   const [editor, setEditor] = useState(EditorState.createEmpty());
   const [title, setTitle] = useState('');
+  const [community, setCommunity] = useState('');
 
   const onChange = editorState => setEditor(editorState);
 
@@ -111,7 +112,8 @@ export const CreatePost = ({ createPost }) => {
     event.preventDefault();
 
     const data = {
-      title
+      title,
+      community
     };
     if (editor.getCurrentContent().hasText()) {
       data.text = convertToRaw(editor.getCurrentContent());
@@ -122,13 +124,19 @@ export const CreatePost = ({ createPost }) => {
   return (
     <div className={styles.create__post}>
       <form className={styles.post__form} onSubmit={handleSubmit}>
-        <Dropdown />
+        <Dropdown
+          selected={community}
+          setSelected={setCommunity}
+          options={Object.values(communities)}
+          placeholder='Select Community'
+        />
         <div className={styles.title__container}>
           <label htmlFor='title' className={styles.label}>
             Title
           </label>
           <textarea
             id='title'
+            placeholder='Enter Title'
             className={styles.post__form__title}
             onChange={event => setTitle(event.target.value)}
             value={title}
@@ -209,6 +217,7 @@ export const CreatePost = ({ createPost }) => {
             </div>
             <Editor
               editorState={editor}
+              placeholder='Enter Text'
               onChange={onChange}
               handleKeyCommand={handleKeyCommand}
               keyBindingFn={keyBindingFunction}

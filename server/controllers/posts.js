@@ -2,18 +2,26 @@ const database = require('../database');
 const AppError = require('../utilities/appError');
 
 const create = async (req, res, next) => {
-  const { community_id, title, text } = req.body;
+  const { community, title, text } = req.body;
   try {
+    const communities = await database
+      .table('communities')
+      .select()
+      .where({ name: community });
+    if (communities.length === 0) {
+      throw new AppError('Community not found', 404);
+    }
+    const searchedCommunity = communities[0];
     const newPost = await database.table('posts').insert(
       {
         user_id: req.user.id,
-        community_id,
+        community_id: searchedCommunity.id,
         title,
         text
       },
       '*'
     );
-    res.status(201).json({ post: newPost });
+    res.status(201).json({ post: newPost[0] });
   } catch (error) {
     next(error);
   }
