@@ -8,6 +8,7 @@
   justify-content: center;
   align-items: center;
   background: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
 }
 
 .modal {
@@ -16,6 +17,7 @@
   padding: 1em;
   border-radius: 3px;
   background: white;
+  cursor: default;
 }
 
 .modal__header {

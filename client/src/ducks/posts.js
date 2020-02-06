@@ -3,6 +3,8 @@ const TOGGLE_POSTS_FETCHING = 'TOGGLE_POSTS_FETCHING';
 const SELECT_COMMUNITY = 'SELECT_COMMUNITY';
 const INVALIDATE_POSTS = 'INVALIDATE_POSTS';
 const RECEIVE_POSTS = 'RECEIVE_POSTS';
+const CREATE_VOTE = 'CREATE_VOTE';
+const UPDATE_VOTE = 'UPDATE_VOTE';
 
 // Action creators
 export const togglePostsFetching = community => ({
@@ -26,13 +28,31 @@ export const invalidatePosts = community => ({
   community
 });
 
+export const createVote = (vote, community) => ({
+  type: CREATE_VOTE,
+  vote,
+  community
+});
+
+export const updateVote = (vote, community) => ({
+  type: UPDATE_VOTE,
+  vote,
+  community
+});
+
 export const fetchPosts = community => async dispatch => {
   try {
+    const token = localStorage.getItem('token');
     const url = `/api/posts/${community ? `community/${community}` : ''}`;
-    const response = await fetch(url, {
+    const opts = {
       method: 'GET'
-    });
-    console.log('RESPONSE', response);
+    };
+    if (token) {
+      opts.headers = {
+        authorization: `Bearer ${token}`
+      };
+    }
+    const response = await fetch(url, opts);
     if (response.ok) {
       const responseData = await response.json();
       dispatch(receivePosts(community, responseData.posts));
@@ -42,7 +62,7 @@ export const fetchPosts = community => async dispatch => {
   }
 };
 
-export const upvote = post_id => async dispatch => {
+export const upvote = (post_id, community) => async dispatch => {
   try {
     const token = localStorage.getItem('token');
     const response = await fetch('/api/posts/upvote', {
@@ -58,13 +78,20 @@ export const upvote = post_id => async dispatch => {
     if (response.ok) {
       const responseData = await response.json();
       console.log(responseData);
+      switch (responseData.action) {
+        case 'create':
+          dispatch(createVote(responseData.vote, community));
+          break;
+        case 'update':
+        case 'delete':
+      }
     }
   } catch (error) {
     console.log(error);
   }
 };
 
-export const downvote = post_id => async dispatch => {
+export const downvote = (post_id, community) => async dispatch => {
   try {
     const token = localStorage.getItem('token');
     const response = await fetch('/api/posts/downvote', {
@@ -79,7 +106,15 @@ export const downvote = post_id => async dispatch => {
     });
     if (response.ok) {
       const responseData = await response.json();
-      console.log(responseData);
+      switch (responseData.action) {
+        case 'create':
+          dispatch(createVote(responseData.vote, community));
+          break;
+        case 'update':
+          dispatch(updateVote(responseData.vote, community));
+          break;
+        case 'delete':
+      }
     }
   } catch (error) {
     console.log(error);
@@ -99,7 +134,6 @@ export const createPost = data => async dispatch => {
     });
     if (response.ok) {
       const responseData = await response.json();
-      console.log('Create Post', responseData);
     }
   } catch (error) {
     console.log(error);
@@ -169,6 +203,61 @@ export const posts = (state = initialState, action) => {
           all: community(state.all, action)
         };
       }
+    case CREATE_VOTE:
+      let stateCopy = {
+        ...state
+      };
+      if (state.all && state.all.byId[action.vote.post_id]) {
+        const post = state.all.byId[action.vote.post_id];
+        stateCopy = {
+          all: {
+            ...stateCopy.all,
+            byId: {
+              ...stateCopy.all.byId,
+              [action.vote.post_id]: Object.assign({}, post, {
+                vote: action.vote.vote,
+                upvotes: action.vote.vote
+                  ? post.upvotes === null
+                    ? 1
+                    : post.upvotes + 1
+                  : post.upvotes === null
+                  ? -1
+                  : post.upvotes - 1
+              })
+            }
+          }
+        };
+      }
+      if (
+        state.byCommunity[action.community] &&
+        state.byCommunity[action.community].byId[action.vote.post_id]
+      ) {
+        const post =
+          state.byCommunity[action.community].byId[action.vote.post_id];
+        stateCopy = {
+          byCommunity: {
+            ...state.byCommunity,
+            [action.community]: {
+              ...state.byCommunity[action.community],
+              byId: {
+                ...state.byCommunity[action.community].byId,
+                [action.vote.post_id]: {
+                  ...post,
+                  vote: action.vote.vote,
+                  upvotes: action.vote.vote
+                    ? post.upvotes === null
+                      ? 1
+                      : post.upvotes + 1
+                    : post.upvotes === null
+                    ? -1
+                    : post.upvotes - 1
+                }
+              }
+            }
+          }
+        };
+      }
+      return stateCopy;
     default:
       return state;
   }

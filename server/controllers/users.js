@@ -105,9 +105,7 @@ const refreshToken = async (req, res, next) => {
     if (!token) {
       throw new AppError('Refresh token is required', 499);
     }
-    console.log('TOKEN', token);
     const decodedToken = await jwt.verify(token, process.env.REFRESH_SECRET);
-    console.log('DECODED TOKEN', decodedToken);
     const user = await database
       .table('users')
       .select()

@@ -24,7 +24,6 @@ export const App = ({ refreshToken, getSession }) => {
         await refreshToken();
       } else {
         const decodedToken = decode(token);
-        console.log('Expired', decodedToken.exp < Date.now() / 1000);
         if (decodedToken.exp < Date.now() / 1000) {
           await refreshToken();
         }

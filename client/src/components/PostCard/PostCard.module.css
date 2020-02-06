@@ -53,6 +53,14 @@
   font-weight: 700;
 }
 
+.vote_red {
+  color: var(--red);
+}
+
+.vote_blue {
+  color: var(--blue);
+}
+
 .post__card__main {
   flex: 1;
   padding: 0.5em;
@@ -100,6 +108,7 @@
 .post__card__content {
   display: flex;
   flex-direction: column;
+  line-height: 1.5;
 }
 
 .post__card__content > *:not(:last-child) {
@@ -109,10 +118,6 @@
 .post__card__title {
   font-size: 1.2rem;
   font-weight: 700;
-}
-
-.post__card__text {
-  line-height: 1.5;
 }
 
 .post__card__button {

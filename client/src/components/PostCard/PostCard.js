@@ -3,6 +3,7 @@ import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { FaArrowUp, FaArrowDown } from 'react-icons/fa';
 import { MdChatBubble } from 'react-icons/md';
+import { Editor, EditorState, convertFromRaw } from 'draft-js';
 
 import styles from './PostCard.module.css';
 
@@ -13,24 +14,34 @@ export const PostCard = ({
   title,
   text,
   upvotes,
+  vote,
   created,
   upvote,
   downvote
 }) => {
+  const contentState = convertFromRaw(JSON.parse(text));
+  const editorState = EditorState.createWithContent(contentState);
+
   return (
     <div className={styles.post__card}>
       <div className={styles.post__card__aside}>
         <div className={styles.post__card__votes}>
           <button
-            className={styles.post__card__vote}
-            onClick={() => upvote(id)}
+            className={`${styles.post__card__vote} ${vote && styles.vote_red}`}
+            onClick={() => upvote(id, community)}
           >
             <FaArrowUp />
           </button>
-          <span className={styles.post__card__upvotes}>{upvotes}</span>
+          <span
+            className={`${styles.post__card__upvotes} ${vote &&
+              styles.vote_red} ${vote === false && styles.vote_blue}`}
+          >
+            {upvotes || 0}
+          </span>
           <button
-            className={styles.post__card__vote}
-            onClick={() => downvote(id)}
+            className={`${styles.post__card__vote} ${vote === false &&
+              styles.vote_blue}`}
+            onClick={() => downvote(id, community)}
           >
             <FaArrowDown />
           </button>
@@ -53,7 +64,7 @@ export const PostCard = ({
         </div>
         <div className={styles.post__card__content}>
           <span className={styles.post__card__title}>{title}</span>
-          <span className={styles.post__card__text}>{text}</span>
+          <Editor editorState={editorState} readOnly={true} />
         </div>
         <div className={styles.post__card__footer}>
           <button className={styles.post__card__button}>

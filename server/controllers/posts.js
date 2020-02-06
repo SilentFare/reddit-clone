@@ -29,7 +29,7 @@ const create = async (req, res, next) => {
 
 const getAll = async (req, res, next) => {
   try {
-    const posts = await database
+    let posts = database
       .table('posts')
       .select(
         'posts.id',
@@ -57,6 +57,20 @@ const getAll = async (req, res, next) => {
         'x.post_id',
         'posts.id'
       );
+    if (req.user) {
+      posts
+        .leftJoin(
+          database
+            .table('post_votes')
+            .select('post_id', 'vote')
+            .where({ user_id: req.user.id })
+            .as('y'),
+          'y.post_id',
+          'posts.id'
+        )
+        .select('y.vote');
+    }
+    posts = await posts;
     res.status(200).json({ posts });
   } catch (error) {
     next(error);
@@ -66,7 +80,7 @@ const getAll = async (req, res, next) => {
 const getByCommunity = async (req, res, next) => {
   const { communityName } = req.params;
   try {
-    const posts = await database
+    let posts = database
       .table('posts')
       .select(
         'posts.id',
@@ -95,6 +109,20 @@ const getByCommunity = async (req, res, next) => {
         'posts.id'
       )
       .where({ 'communities.name': communityName });
+    if (req.user) {
+      posts
+        .leftJoin(
+          database
+            .table('post_votes')
+            .select('post_id', 'vote')
+            .where({ user_id: req.user.id })
+            .as('y'),
+          'y.post_id',
+          'posts.id'
+        )
+        .select('y.vote');
+    }
+    posts = await posts;
     res.status(200).json({ posts });
   } catch (error) {
     next(error);

@@ -1,16 +1,17 @@
 const { Router } = require('express');
 
 const protect = require('../middlewares/protect');
+const session = require('../middlewares/session');
 const { posts } = require('../controllers');
 
 const router = Router();
 
 router
   .route('/')
-  .get(posts.getAll)
+  .get(session, posts.getAll)
   .post(protect, posts.create);
 router.post('/upvote', protect, posts.upvote);
 router.post('/downvote', protect, posts.downvote);
-router.get('/community/:communityName', posts.getByCommunity);
+router.get('/community/:communityName', session, posts.getByCommunity);
 
 module.exports = router;

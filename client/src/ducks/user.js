@@ -89,7 +89,6 @@ export const refreshToken = () => async dispatch => {
       const responseData = await response.json();
       localStorage.setItem('token', responseData.token);
     } else {
-      console.log('DUCK', response);
       localStorage.removeItem('token');
       dispatch(logout());
     }
@@ -101,7 +100,6 @@ export const refreshToken = () => async dispatch => {
 export const getSession = () => async dispatch => {
   try {
     const token = localStorage.getItem('token');
-    console.log('Token', token);
     if (token) {
       const response = await fetch('/api/users', {
         method: 'GET',
@@ -109,7 +107,6 @@ export const getSession = () => async dispatch => {
           authorization: `Bearer ${token}`
         }
       });
-      console.log(response);
       if (response.ok) {
         const responseData = await response.json();
         dispatch(receiveSession(responseData.user));

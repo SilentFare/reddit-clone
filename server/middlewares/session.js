@@ -7,11 +7,11 @@ module.exports = async (req, res, next) => {
   try {
     const { authorization } = req.headers;
     if (!authorization) {
-      throw new AppError('Unauthorized access', 403);
+      return next();
     }
     const token = authorization.split(' ')[1];
     if (!token) {
-      throw new AppError('Invalid token', 403);
+      next();
     }
     const decodedToken = await jwt.verify(token, process.env.ACCESS_SECRET);
     const user = await database
@@ -22,7 +22,6 @@ module.exports = async (req, res, next) => {
     req.user = userWithoutPassword;
     next();
   } catch (err) {
-    const error = new AppError('Authentication failed', 403);
-    next(error);
+    next();
   }
 };

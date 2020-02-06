@@ -3,6 +3,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 1em 0;
   background: var(--lighter-black);
 }
 
@@ -46,9 +47,12 @@
 }
 
 .post__editor {
+  display: flex;
+  flex-direction: column;
   border-radius: 3px;
   background: var(--white);
   overflow: hidden;
+  height: 10em;
 }
 
 .post__editor__toolbar {
@@ -59,10 +63,6 @@
 
 .post__editor__toolbar > *:not(:last-child) {
   margin-right: 1rem;
-}
-
-.editor {
-  padding: 1em;
 }
 
 .vertical__line {
