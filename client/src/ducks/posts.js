@@ -5,6 +5,7 @@ const INVALIDATE_POSTS = 'INVALIDATE_POSTS';
 const RECEIVE_POSTS = 'RECEIVE_POSTS';
 const CREATE_VOTE = 'CREATE_VOTE';
 const UPDATE_VOTE = 'UPDATE_VOTE';
+const DELETE_VOTE = 'DELETE_VOTE';
 
 // Action creators
 export const togglePostsFetching = community => ({
@@ -36,6 +37,12 @@ export const createVote = (vote, community) => ({
 
 export const updateVote = (vote, community) => ({
   type: UPDATE_VOTE,
+  vote,
+  community
+});
+
+export const deleteVote = (vote, community) => ({
+  type: DELETE_VOTE,
   vote,
   community
 });
@@ -83,7 +90,10 @@ export const upvote = (post_id, community) => async dispatch => {
           dispatch(createVote(responseData.vote, community));
           break;
         case 'update':
+          dispatch(updateVote(responseData.vote, community));
+          break;
         case 'delete':
+          dispatch(deleteVote(responseData.vote, community));
       }
     }
   } catch (error) {
@@ -114,6 +124,7 @@ export const downvote = (post_id, community) => async dispatch => {
           dispatch(updateVote(responseData.vote, community));
           break;
         case 'delete':
+          dispatch(deleteVote(responseData.vote, community));
       }
     }
   } catch (error) {
@@ -210,6 +221,7 @@ export const posts = (state = initialState, action) => {
       if (state.all && state.all.byId[action.vote.post_id]) {
         const post = state.all.byId[action.vote.post_id];
         stateCopy = {
+          ...stateCopy,
           all: {
             ...stateCopy.all,
             byId: {
@@ -219,10 +231,10 @@ export const posts = (state = initialState, action) => {
                 upvotes: action.vote.vote
                   ? post.upvotes === null
                     ? 1
-                    : post.upvotes + 1
+                    : parseInt(post.upvotes) + 1
                   : post.upvotes === null
                   ? -1
-                  : post.upvotes - 1
+                  : parseInt(post.upvotes) - 1
               })
             }
           }
@@ -235,22 +247,23 @@ export const posts = (state = initialState, action) => {
         const post =
           state.byCommunity[action.community].byId[action.vote.post_id];
         stateCopy = {
+          ...stateCopy,
           byCommunity: {
-            ...state.byCommunity,
+            ...stateCopy.byCommunity,
             [action.community]: {
-              ...state.byCommunity[action.community],
+              ...stateCopy.byCommunity[action.community],
               byId: {
-                ...state.byCommunity[action.community].byId,
+                ...stateCopy.byCommunity[action.community].byId,
                 [action.vote.post_id]: {
                   ...post,
                   vote: action.vote.vote,
                   upvotes: action.vote.vote
                     ? post.upvotes === null
                       ? 1
-                      : post.upvotes + 1
+                      : parseInt(post.upvotes) + 1
                     : post.upvotes === null
                     ? -1
-                    : post.upvotes - 1
+                    : parseInt(post.upvotes) - 1
                 }
               }
             }
@@ -258,6 +271,101 @@ export const posts = (state = initialState, action) => {
         };
       }
       return stateCopy;
+    case UPDATE_VOTE:
+      let stateCopi = {
+        ...state
+      };
+      if (state.all && state.all.byId[action.vote.post_id]) {
+        const post = state.all.byId[action.vote.post_id];
+        stateCopi = {
+          ...stateCopi,
+          all: {
+            ...stateCopi.all,
+            byId: {
+              ...stateCopi.all.byId,
+              [action.vote.post_id]: Object.assign({}, post, {
+                vote: action.vote.vote,
+                upvotes: action.vote.vote
+                  ? parseInt(post.upvotes) + 2
+                  : parseInt(post.upvotes) - 2
+              })
+            }
+          }
+        };
+      }
+      if (
+        state.byCommunity[action.community] &&
+        state.byCommunity[action.community].byId[action.vote.post_id]
+      ) {
+        const post =
+          state.byCommunity[action.community].byId[action.vote.post_id];
+        stateCopi = {
+          ...stateCopi,
+          byCommunity: {
+            ...stateCopi.byCommunity,
+            [action.community]: {
+              ...stateCopi.byCommunity[action.community],
+              byId: {
+                ...stateCopi.byCommunity[action.community].byId,
+                [action.vote.post_id]: {
+                  ...post,
+                  vote: action.vote.vote,
+                  upvotes: action.vote.vote
+                    ? parseInt(post.upvotes) + 2
+                    : parseInt(post.upvotes) - 2
+                }
+              }
+            }
+          }
+        };
+      }
+      return stateCopi;
+    case DELETE_VOTE:
+      let stateCopee = {
+        ...state
+      };
+      if (state.all && state.all.byId[action.vote.post_id]) {
+        const post = state.all.byId[action.vote.post_id];
+        const postCopy = Object.assign({}, post);
+        delete postCopy['vote'];
+        postCopy['upvotes'] =
+          parseInt(postCopy['upvotes']) + (action.vote.vote ? -1 : 1);
+        stateCopee = {
+          ...stateCopee,
+          all: {
+            ...stateCopee.all,
+            byId: {
+              ...stateCopee.all.byId,
+              [action.vote.post_id]: postCopy
+            }
+          }
+        };
+      }
+      if (
+        state.byCommunity[action.community] &&
+        state.byCommunity[action.community].byId[action.vote.post_id]
+      ) {
+        const post =
+          state.byCommunity[action.community].byId[action.vote.post_id];
+        const postCopy = Object.assign({}, post);
+        delete postCopy['vote'];
+        postCopy['upvotes'] =
+          parseInt(postCopy['upvotes']) + (action.vote.vote ? -1 : 1);
+        stateCopee = {
+          ...stateCopee,
+          byCommunity: {
+            ...stateCopee.byCommunity,
+            [action.community]: {
+              ...stateCopee.byCommunity[action.community],
+              byId: {
+                ...stateCopee.byCommunity[action.community].byId,
+                [action.vote.post_id]: postCopy
+              }
+            }
+          }
+        };
+      }
+      return stateCopee;
     default:
       return state;
   }

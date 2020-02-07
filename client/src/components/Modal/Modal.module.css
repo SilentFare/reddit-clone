@@ -9,6 +9,8 @@
   align-items: center;
   background: rgba(0, 0, 0, 0.5);
   cursor: pointer;
+  z-index: 2;
+  overflow: hidden;
 }
 
 .modal {
