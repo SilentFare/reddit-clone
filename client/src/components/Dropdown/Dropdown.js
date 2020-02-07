@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import PropTypes from 'prop-types';
 import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
 
 import styles from './Dropdown.module.css';
@@ -55,4 +56,11 @@ export const Dropdown = ({ options, placeholder, selected, setSelected }) => {
       )}
     </div>
   );
+};
+
+Dropdown.propTypes = {
+  options: PropTypes.array.isRequired,
+  placeholder: PropTypes.string.isRequired,
+  selected: PropTypes.string.isRequired,
+  setSelected: PropTypes.func.isRequired
 };

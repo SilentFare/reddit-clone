@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import {
   Editor,
   EditorState,
@@ -147,35 +148,35 @@ export const CreatePost = ({ createPost, communities }) => {
           <div className={styles.post__editor}>
             <div className={styles.post__editor__toolbar}>
               <ToolbarButton
-                style='BOLD'
+                pattern='BOLD'
                 onMouseDown={toggleInlineStyle}
                 editorState={editor}
               >
                 <FaBold />
               </ToolbarButton>
               <ToolbarButton
-                style='ITALIC'
+                pattern='ITALIC'
                 onMouseDown={toggleInlineStyle}
                 editorState={editor}
               >
                 <FaItalic />
               </ToolbarButton>
               <ToolbarButton
-                style='UNDERLINE'
+                pattern='UNDERLINE'
                 onMouseDown={toggleInlineStyle}
                 editorState={editor}
               >
                 <FaUnderline />
               </ToolbarButton>
               <ToolbarButton
-                style='STRIKETHROUGH'
+                pattern='STRIKETHROUGH'
                 onMouseDown={toggleInlineStyle}
                 editorState={editor}
               >
                 <FaStrikethrough />
               </ToolbarButton>
               <ToolbarButton
-                style='CODE'
+                pattern='CODE'
                 onMouseDown={toggleInlineStyle}
                 editorState={editor}
               >
@@ -183,7 +184,7 @@ export const CreatePost = ({ createPost, communities }) => {
               </ToolbarButton>
               <div className={styles.vertical__line} />
               <ToolbarButton
-                style='header-one'
+                pattern='header-one'
                 onMouseDown={toggleBlockType}
                 editorState={editor}
                 block={true}
@@ -191,7 +192,7 @@ export const CreatePost = ({ createPost, communities }) => {
                 <FaHeading />
               </ToolbarButton>
               <ToolbarButton
-                style='blockquote'
+                pattern='blockquote'
                 onMouseDown={toggleBlockType}
                 editorState={editor}
                 block={true}
@@ -199,7 +200,7 @@ export const CreatePost = ({ createPost, communities }) => {
                 <FaQuoteLeft />
               </ToolbarButton>
               <ToolbarButton
-                style='unordered-list-item'
+                pattern='unordered-list-item'
                 onMouseDown={toggleBlockType}
                 editorState={editor}
                 block={true}
@@ -207,7 +208,7 @@ export const CreatePost = ({ createPost, communities }) => {
                 <FaListUl />
               </ToolbarButton>
               <ToolbarButton
-                style='ordered-list-item'
+                pattern='ordered-list-item'
                 onMouseDown={toggleBlockType}
                 editorState={editor}
                 block={true}
@@ -228,4 +229,9 @@ export const CreatePost = ({ createPost, communities }) => {
       </form>
     </div>
   );
+};
+
+CreatePost.propTypes = {
+  createPost: PropTypes.func.isRequired,
+  communities: PropTypes.array.isRequired
 };

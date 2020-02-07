@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import styles from './HamburgerButton.module.css';
 
@@ -10,4 +11,8 @@ export const HamburgerButton = ({ onClick }) => {
       <div className={styles.hamburger__bun} />
     </button>
   );
+};
+
+HamburgerButton.propTypes = {
+  onClick: PropTypes.func.isRequired
 };

@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
 
 import styles from './Sidebar.module.css';
 import HamburgerButton from '../HamburgerButton';
@@ -13,7 +14,7 @@ export const Sidebar = ({
 }) => {
   useEffect(() => {
     fetchCommunities();
-  }, []);
+  }, [fetchCommunities]);
 
   return (
     <aside className={`${styles.sidebar} ${show && styles.sidebar_show}`}>
@@ -28,4 +29,11 @@ export const Sidebar = ({
       </div>
     </aside>
   );
+};
+
+Sidebar.propTypes = {
+  show: PropTypes.bool.isRequired,
+  toggleSidebar: PropTypes.func.isRequired,
+  fetchCommunities: PropTypes.func.isRequired,
+  communities: PropTypes.array.isRequired
 };

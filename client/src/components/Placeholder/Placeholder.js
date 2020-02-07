@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import styles from './Placeholder.module.css';
 
@@ -9,3 +10,5 @@ export const Placeholder = () => {
     </div>
   );
 };
+
+Placeholder.propTypes = {};

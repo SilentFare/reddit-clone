@@ -55,6 +55,7 @@ export const fetchPosts = community => async dispatch => {
       method: 'GET'
     };
     if (token) {
+      console.log('Token', token);
       opts.headers = {
         authorization: `Bearer ${token}`
       };
@@ -84,7 +85,6 @@ export const upvote = (post_id, community) => async dispatch => {
     });
     if (response.ok) {
       const responseData = await response.json();
-      console.log(responseData);
       switch (responseData.action) {
         case 'create':
           dispatch(createVote(responseData.vote, community));
@@ -94,6 +94,9 @@ export const upvote = (post_id, community) => async dispatch => {
           break;
         case 'delete':
           dispatch(deleteVote(responseData.vote, community));
+          break;
+        default:
+          return;
       }
     }
   } catch (error) {
@@ -125,6 +128,9 @@ export const downvote = (post_id, community) => async dispatch => {
           break;
         case 'delete':
           dispatch(deleteVote(responseData.vote, community));
+          break;
+        default:
+          return;
       }
     }
   } catch (error) {
@@ -145,6 +151,7 @@ export const createPost = data => async dispatch => {
     });
     if (response.ok) {
       const responseData = await response.json();
+      console.log('Response Data', responseData);
     }
   } catch (error) {
     console.log(error);

@@ -50,5 +50,7 @@ Header.propTypes = {
   toggleLogin: PropTypes.func.isRequired,
   toggleRegister: PropTypes.func.isRequired,
   toggleSidebar: PropTypes.func.isRequired,
-  auth: PropTypes.bool.isRequired
+  auth: PropTypes.bool.isRequired,
+  fetching: PropTypes.bool.isRequired,
+  logout: PropTypes.func.isRequired
 };

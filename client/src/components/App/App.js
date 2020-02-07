@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
 import decode from 'jwt-decode';
 import {
   BrowserRouter as Router,
@@ -45,7 +46,7 @@ export const App = ({ refreshToken, getSession }) => {
             <Route path={['/', '/r/:community']} exact>
               <Posts />
             </Route>
-            <Route path='/discussion'>
+            <Route path='/post/:post_id'>
               <Discussion />
             </Route>
             <Route path='/submit'>
@@ -57,4 +58,9 @@ export const App = ({ refreshToken, getSession }) => {
       </Router>
     </div>
   );
+};
+
+App.propTypes = {
+  refreshToken: PropTypes.func.isRequired,
+  getSession: PropTypes.func.isRequired
 };

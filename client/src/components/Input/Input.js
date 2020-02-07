@@ -30,6 +30,7 @@ export const Input = ({ type, label, onChange, value }) => {
 };
 
 Input.propTypes = {
+  type: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   value: PropTypes.string.isRequired

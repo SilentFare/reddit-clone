@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { createPortal } from 'react-dom';
 import { MdClose } from 'react-icons/md';
 
@@ -28,4 +29,10 @@ export const Modal = ({ show, close, children }) => {
         document.body
       )
     : null;
+};
+
+Modal.propTypes = {
+  show: PropTypes.bool.isRequired,
+  close: PropTypes.func.isRequired,
+  children: PropTypes.node.isRequired
 };

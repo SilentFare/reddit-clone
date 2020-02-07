@@ -34,6 +34,8 @@ export const Button = ({ to, href, label, type, className, onClick }) => {
 
 Button.propTypes = {
   label: PropTypes.string.isRequired,
+  className: PropTypes.string,
+  type: PropTypes.string,
   to: PropTypes.string,
   href: PropTypes.string,
   onClick: PropTypes.func

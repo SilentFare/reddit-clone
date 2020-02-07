@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { useParams } from 'react-router-dom';
 
 import styles from './Posts.module.css';
@@ -9,7 +10,7 @@ export const Posts = ({ fetchPosts, posts }) => {
 
   useEffect(() => {
     fetchPosts(community);
-  }, [community]);
+  }, [community, fetchPosts]);
 
   if (community && posts.byCommunity[community]) {
     return (
@@ -52,4 +53,9 @@ export const Posts = ({ fetchPosts, posts }) => {
   }
 
   return <span>Loading</span>;
+};
+
+Posts.propTypes = {
+  fetchPosts: PropTypes.func.isRequired,
+  posts: PropTypes.array.isRequired
 };

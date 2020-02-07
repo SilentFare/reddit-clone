@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
 import styles from './LoginModal.module.css';
 import Modal from '../Modal';
@@ -56,4 +57,11 @@ export const LoginModal = ({ show, toggleLogin, toggleRegister, login }) => {
       </span>
     </Modal>
   );
+};
+
+LoginModal.propTypes = {
+  show: PropTypes.bool.isRequired,
+  toggleLogin: PropTypes.func.isRequired,
+  toggleRegister: PropTypes.func.isRequired,
+  login: PropTypes.func.isRequired
 };

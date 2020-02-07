@@ -1,3 +1,3 @@
-import { Discussion } from './Discussion';
+import DiscussionContainer from './DiscussionContainer';
 
-export default Discussion;
+export default DiscussionContainer;

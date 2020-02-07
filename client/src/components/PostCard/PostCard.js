@@ -1,6 +1,7 @@
 import React from 'react';
 import moment from 'moment';
-import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { Link, useHistory } from 'react-router-dom';
 import { FaArrowUp, FaArrowDown } from 'react-icons/fa';
 import { MdChatBubble } from 'react-icons/md';
 import { Editor, EditorState, convertFromRaw } from 'draft-js';
@@ -21,14 +22,21 @@ export const PostCard = ({
 }) => {
   const contentState = convertFromRaw(JSON.parse(text));
   const editorState = EditorState.createWithContent(contentState);
+  const history = useHistory();
 
   return (
-    <div className={styles.post__card}>
+    <div
+      onClick={() => history.push(`/post/${id}`)}
+      className={styles.post__card}
+    >
       <div className={styles.post__card__aside}>
         <div className={styles.post__card__votes}>
           <button
             className={`${styles.post__card__vote} ${vote && styles.vote_red}`}
-            onClick={() => upvote(id, community)}
+            onClick={event => {
+              event.stopPropagation();
+              upvote(id, community);
+            }}
           >
             <FaArrowUp />
           </button>
@@ -41,7 +49,10 @@ export const PostCard = ({
           <button
             className={`${styles.post__card__vote} ${vote === false &&
               styles.vote_blue}`}
-            onClick={() => downvote(id, community)}
+            onClick={event => {
+              event.stopPropagation();
+              downvote(id, community);
+            }}
           >
             <FaArrowDown />
           </button>
@@ -49,12 +60,20 @@ export const PostCard = ({
       </div>
       <div className={styles.post__card__main}>
         <div className={styles.post__card__header}>
-          <Link to={`/r/${community}`} className={styles.post__card__community}>
+          <Link
+            onClick={event => event.stopPropagation()}
+            to={`/r/${community}`}
+            className={styles.post__card__community}
+          >
             {`r/${community}`}
           </Link>
           <span className={styles.post__card__author}>
             Posted by{' '}
-            <Link to={`/u/${user}`} className={styles.post__card__user}>
+            <Link
+              onClick={event => event.stopPropagation()}
+              to={`/u/${user}`}
+              className={styles.post__card__user}
+            >
               {`u/${user}`}
             </Link>
           </span>
@@ -75,4 +94,17 @@ export const PostCard = ({
       </div>
     </div>
   );
+};
+
+PostCard.propTypes = {
+  id: PropTypes.number.isRequired,
+  community: PropTypes.string.isRequired,
+  user: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  upvotes: PropTypes.number.isRequired,
+  created: PropTypes.string.isRequired,
+  upvote: PropTypes.func.isRequired,
+  downvote: PropTypes.func.isRequired,
+  vote: PropTypes.bool,
+  text: PropTypes.string
 };
