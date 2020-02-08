@@ -223,10 +223,54 @@ const getOne = async (req, res, next) => {
     if (!post_id) {
       throw new AppError('Post ID not found', 422);
     }
-    const data = await database
+    let data = database
       .table('posts')
-      .select()
-      .where({ id: post_id });
+      .select(
+        'posts.id',
+        'posts.user_id',
+        'users.name as user',
+        'posts.community_id',
+        'communities.name as community',
+        'posts.title',
+        'posts.text',
+        'x.upvotes',
+        'x.upvote_percent',
+        'posts.created_at',
+        'posts.updated_at'
+      )
+      .where('posts.id', post_id)
+      .leftJoin('users', 'posts.user_id', 'users.id')
+      .leftJoin('communities', 'posts.community_id', 'communities.id')
+      .leftJoin(
+        database
+          .table('post_votes')
+          .select(
+            'post_id',
+            database.raw('SUM(CASE WHEN vote THEN 1 ELSE -1 END) as upvotes'),
+            database.raw(
+              'SUM(CASE WHEN vote THEN 1 END)/COUNT(VOTE)::FLOAT as upvote_percent'
+            )
+          )
+          .groupBy('post_id')
+          .as('x'),
+        'x.post_id',
+        'posts.id'
+      );
+    if (req.user) {
+      console.log('User', req.user);
+      data
+        .leftJoin(
+          database
+            .table('post_votes')
+            .select('post_id', 'vote')
+            .where({ user_id: req.user.id })
+            .as('y'),
+          'y.post_id',
+          'posts.id'
+        )
+        .select('y.vote');
+    }
+    data = await data;
     console.log('Data', data);
     if (data.length === 0) {
       throw new AppError('Post not found', 404);

@@ -1,0 +1,160 @@
+.post {
+  display: flex;
+}
+
+.post__aside {
+  padding: 0.5em;
+}
+
+.post__votes {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.post__votes > *:not(:last-child) {
+  margin-bottom: 0.1em;
+}
+
+.post__aside {
+  padding: 0.5em;
+}
+
+.post__votes {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.post__votes > *:not(:last-child) {
+  margin-bottom: 0.1em;
+}
+
+.post__vote {
+  font-size: 1rem;
+  color: var(--white);
+  padding: 0.3em;
+  border-radius: 3px;
+  cursor: pointer;
+  border: none;
+  background: none;
+  outline: none;
+}
+
+.post__vote:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.post__vote:first-child:hover {
+  color: var(--red);
+}
+
+.post__vote:last-child:hover {
+  color: var(--blue);
+}
+
+.post__upvotes {
+  font-weight: 700;
+}
+
+.vote_red {
+  color: var(--red);
+}
+
+.vote_blue {
+  color: var(--blue);
+}
+
+.post__main {
+  flex: 1;
+  padding: 0.5em;
+}
+
+.post__main > *:not(:last-child) {
+  margin-bottom: 0.5em;
+}
+
+.post__header {
+  font-size: 0.8rem;
+}
+
+.post__header > *:not(:last-child) {
+  margin-right: 0.5em;
+}
+
+.post__community {
+  color: var(--blue);
+  text-decoration: none;
+}
+
+.post__community:hover {
+  text-decoration: underline;
+}
+
+.post__user {
+  color: var(--blue);
+  text-decoration: none;
+}
+
+.post__user:hover {
+  text-decoration: underline;
+}
+
+.post__time {
+  color: var(--blue);
+  text-decoration: none;
+}
+
+.post__time:hover {
+  text-decoration: underline;
+}
+
+.post__content {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.5;
+}
+
+.post__content > *:not(:last-child) {
+  margin-bottom: 0.5em;
+}
+
+.post__title {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.post__button {
+  display: flex;
+  color: var(--white);
+  padding: 0.5em;
+  cursor: pointer;
+  border-radius: 3px;
+  border: none;
+  background: none;
+  outline: none;
+}
+
+.post__button:hover {
+  background: var(--blue);
+}
+
+.post__comments {
+  font-weight: 700;
+}
+
+.comment__icon {
+  margin-top: 0.03em;
+  margin-right: 0.3em;
+}
+
+.post__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.post__upvote__percent {
+  font-weight: 300;
+  font-size: 0.8rem;
+}

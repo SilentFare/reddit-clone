@@ -68,7 +68,6 @@ export const fetchPosts = community => async dispatch => {
       method: 'GET'
     };
     if (token) {
-      console.log('Token', token);
       opts.headers = {
         authorization: `Bearer ${token}`
       };
@@ -85,12 +84,17 @@ export const fetchPosts = community => async dispatch => {
 
 export const fetchDiscussion = post_id => async dispatch => {
   try {
-    const postResponse = await fetch(`/api/posts/${post_id}`, {
+    const token = localStorage.getItem('token');
+    const opts = {
       method: 'GET'
-    });
-    const commentResponse = await fetch(`/api/comments/post/${post_id}`, {
-      method: 'GET'
-    });
+    };
+    if (token) {
+      opts.headers = {
+        authorization: `Bearer ${token}`
+      };
+    }
+    const postResponse = await fetch(`/api/posts/${post_id}`, opts);
+    const commentResponse = await fetch(`/api/comments/post/${post_id}`, opts);
     if (postResponse.ok && commentResponse.ok) {
       const postResponseData = await postResponse.json();
       const commentResponseData = await commentResponse.json();

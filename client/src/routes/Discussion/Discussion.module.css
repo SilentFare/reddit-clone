@@ -6,3 +6,8 @@
   align-items: center;
   background: var(--lighter-black);
 }
+
+.discussion__content {
+  background: var(--grey);
+  color: var(--white);
+}

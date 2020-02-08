@@ -3,7 +3,9 @@ import { connect } from 'react-redux';
 import { Discussion } from './Discussion';
 import { fetchDiscussion } from '../../ducks/posts';
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+  posts: state.posts.byId
+});
 
 const mapDispatchToProps = { fetchDiscussion };
 

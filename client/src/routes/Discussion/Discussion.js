@@ -5,20 +5,46 @@ import { useParams } from 'react-router-dom';
 import styles from './Discussion.module.css';
 import Post from '../../components/Post';
 
-export const Discussion = ({ fetchDiscussion }) => {
+export const Discussion = ({ fetchDiscussion, posts }) => {
   const { post_id } = useParams();
 
   useEffect(() => {
     fetchDiscussion(post_id);
   }, [fetchDiscussion, post_id]);
 
-  return (
-    <div className={styles.discussion}>
-      <div className={styles.discussion__content}>
-        <Post />
+  if (posts && posts[post_id]) {
+    const { post } = posts[post_id];
+    // vote,
+    // upvote,
+    // downvote,
+    // id,
+    // community,
+    // upvotes,
+    // title,
+    // text,
+    // user,
+    // created
+    console.log(post);
+    return (
+      <div className={styles.discussion}>
+        <div className={styles.discussion__content}>
+          <Post
+            key={post.title}
+            id={post.id}
+            user={post.user}
+            community={post.community}
+            title={post.title}
+            text={post.text}
+            upvotes={post.upvotes}
+            upvotePercent={post.upvote_percent}
+            vote={post.vote}
+            created={post.created_at}
+          />
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
+  return <span>Loading</span>;
 };
 
 Discussion.propTypes = {
