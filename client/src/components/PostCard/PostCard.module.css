@@ -1,6 +1,6 @@
 .post__card {
   display: flex;
-  max-width: 40em;
+  width: 70%;
   color: var(--white);
   background: var(--lighter-grey);
   border-radius: 3px;

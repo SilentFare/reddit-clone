@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import styles from './Discussion.module.css';
 import Post from '../../components/Post';
+import CommentEditor from '../../components/CommentEditor';
 
 export const Discussion = ({ fetchDiscussion, posts }) => {
   const { post_id } = useParams();
@@ -14,17 +15,7 @@ export const Discussion = ({ fetchDiscussion, posts }) => {
 
   if (posts && posts[post_id]) {
     const { post } = posts[post_id];
-    // vote,
-    // upvote,
-    // downvote,
-    // id,
-    // community,
-    // upvotes,
-    // title,
-    // text,
-    // user,
-    // created
-    console.log(post);
+
     return (
       <div className={styles.discussion}>
         <div className={styles.discussion__content}>
@@ -40,6 +31,7 @@ export const Discussion = ({ fetchDiscussion, posts }) => {
             vote={post.vote}
             created={post.created_at}
           />
+          <CommentEditor />
         </div>
       </div>
     );

@@ -1,0 +1,24 @@
+.comment__auth__request {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid var(--white);
+  border-radius: 3px;
+  padding: 1em;
+  margin: 1em;
+}
+
+.comment__auth__label {
+}
+
+.comment__auth__buttons {
+}
+
+.comment__auth__buttons > *:not(:last-child) {
+  margin-right: 1em;
+}
+
+.editor__container {
+  width: 90%;
+  margin: auto;
+}

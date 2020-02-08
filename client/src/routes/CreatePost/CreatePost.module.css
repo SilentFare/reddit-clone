@@ -46,25 +46,6 @@
   flex-direction: column;
 }
 
-.post__editor {
-  display: flex;
-  flex-direction: column;
-  border-radius: 3px;
-  background: var(--white);
-  overflow: hidden;
-  height: 10em;
-}
-
-.post__editor__toolbar {
-  display: flex;
-  padding: 0.5em;
-  background: var(--blue);
-}
-
-.post__editor__toolbar > *:not(:last-child) {
-  margin-right: 1rem;
-}
-
 .vertical__line {
   width: 1px;
   background: white;
