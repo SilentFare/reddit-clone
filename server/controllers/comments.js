@@ -23,7 +23,14 @@ const getByPost = async (req, res, next) => {
   const { post_id } = req.params;
   try {
     if (!post_id) {
-      throw new AppError('Post ID not found', 404);
+      throw new AppError('Post ID not found', 422);
+    }
+    const postData = await database
+      .table('posts')
+      .select()
+      .where({ id: post_id });
+    if (postData.length === 0) {
+      throw new AppError('Post not found', 404);
     }
     const comments = await database
       .table('comments')

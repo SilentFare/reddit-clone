@@ -101,7 +101,6 @@ PostCard.propTypes = {
   community: PropTypes.string.isRequired,
   user: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  upvotes: PropTypes.number.isRequired,
   created: PropTypes.string.isRequired,
   upvote: PropTypes.func.isRequired,
   downvote: PropTypes.func.isRequired,

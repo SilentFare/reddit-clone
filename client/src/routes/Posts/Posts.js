@@ -57,5 +57,5 @@ export const Posts = ({ fetchPosts, posts }) => {
 
 Posts.propTypes = {
   fetchPosts: PropTypes.func.isRequired,
-  posts: PropTypes.array.isRequired
+  posts: PropTypes.object.isRequired
 };

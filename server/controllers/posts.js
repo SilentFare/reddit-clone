@@ -217,10 +217,31 @@ const downvote = async (req, res, next) => {
   }
 };
 
+const getOne = async (req, res, next) => {
+  try {
+    const { post_id } = req.params;
+    if (!post_id) {
+      throw new AppError('Post ID not found', 422);
+    }
+    const data = await database
+      .table('posts')
+      .select()
+      .where({ id: post_id });
+    console.log('Data', data);
+    if (data.length === 0) {
+      throw new AppError('Post not found', 404);
+    }
+    return res.status(200).json({ post: data[0] });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   create,
   getAll,
   getByCommunity,
   upvote,
-  downvote
+  downvote,
+  getOne
 };

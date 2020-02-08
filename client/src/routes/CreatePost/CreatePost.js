@@ -233,5 +233,5 @@ export const CreatePost = ({ createPost, communities }) => {
 
 CreatePost.propTypes = {
   createPost: PropTypes.func.isRequired,
-  communities: PropTypes.array.isRequired
+  communities: PropTypes.object.isRequired
 };

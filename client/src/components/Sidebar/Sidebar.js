@@ -35,5 +35,5 @@ Sidebar.propTypes = {
   show: PropTypes.bool.isRequired,
   toggleSidebar: PropTypes.func.isRequired,
   fetchCommunities: PropTypes.func.isRequired,
-  communities: PropTypes.array.isRequired
+  communities: PropTypes.object.isRequired
 };

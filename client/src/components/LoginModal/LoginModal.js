@@ -37,7 +37,12 @@ export const LoginModal = ({ show, toggleLogin, toggleRegister, login }) => {
   return (
     <Modal show={show} close={toggleLogin}>
       <form onSubmit={handleFormSubmit} className={styles.login__form}>
-        <Input label='Name' onChange={update(setName)} value={name} />
+        <Input
+          type='text'
+          label='Name'
+          onChange={update(setName)}
+          value={name}
+        />
         <Input
           type='password'
           label='Password'

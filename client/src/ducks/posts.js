@@ -1,16 +1,23 @@
 // Action types
 const TOGGLE_POSTS_FETCHING = 'TOGGLE_POSTS_FETCHING';
+const TOGGLE_POST_FETCHING = 'TOGGLE_POST_FETCHING';
 const SELECT_COMMUNITY = 'SELECT_COMMUNITY';
 const INVALIDATE_POSTS = 'INVALIDATE_POSTS';
 const RECEIVE_POSTS = 'RECEIVE_POSTS';
 const CREATE_VOTE = 'CREATE_VOTE';
 const UPDATE_VOTE = 'UPDATE_VOTE';
 const DELETE_VOTE = 'DELETE_VOTE';
+const RECEIVE_POST_DISCUSSION = 'RECEIVE_POST_DISCUSSION';
 
 // Action creators
 export const togglePostsFetching = community => ({
   type: TOGGLE_POSTS_FETCHING,
   community
+});
+
+export const togglePostFetching = post_id => ({
+  type: TOGGLE_POST_FETCHING,
+  post_id
 });
 
 export const selectCommunity = community => ({
@@ -47,6 +54,12 @@ export const deleteVote = (vote, community) => ({
   community
 });
 
+export const receivePostDiscussion = post => ({
+  type: RECEIVE_POST_DISCUSSION,
+  post
+});
+
+// Async action creators
 export const fetchPosts = community => async dispatch => {
   try {
     const token = localStorage.getItem('token');
@@ -64,6 +77,24 @@ export const fetchPosts = community => async dispatch => {
     if (response.ok) {
       const responseData = await response.json();
       dispatch(receivePosts(community, responseData.posts));
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const fetchDiscussion = post_id => async dispatch => {
+  try {
+    const postResponse = await fetch(`/api/posts/${post_id}`, {
+      method: 'GET'
+    });
+    const commentResponse = await fetch(`/api/comments/post/${post_id}`, {
+      method: 'GET'
+    });
+    if (postResponse.ok && commentResponse.ok) {
+      const postResponseData = await postResponse.json();
+      const commentResponseData = await commentResponse.json();
+      dispatch(receivePostDiscussion(postResponseData.post));
     }
   } catch (error) {
     console.log(error);
@@ -190,8 +221,25 @@ const community = (
   }
 };
 
+const post = (
+  state = { post: {}, invalidate: false, fetching: true },
+  action
+) => {
+  switch (action.type) {
+    case RECEIVE_POST_DISCUSSION:
+      return {
+        post: action.post,
+        fetching: false,
+        invalidate: false
+      };
+    default:
+      return state;
+  }
+};
+
 const initialState = {
-  byCommunity: {}
+  byCommunity: {},
+  byId: {}
 };
 // Reducer
 export const posts = (state = initialState, action) => {
@@ -373,6 +421,14 @@ export const posts = (state = initialState, action) => {
         };
       }
       return stateCopee;
+    case RECEIVE_POST_DISCUSSION:
+      return {
+        ...state,
+        byId: {
+          ...state.byId,
+          [action.post.id]: post(state.byId[action.post.id], action)
+        }
+      };
     default:
       return state;
   }

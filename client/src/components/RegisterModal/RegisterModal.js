@@ -47,8 +47,14 @@ export const RegisterModal = ({
   return (
     <Modal show={show} close={toggleRegister}>
       <form onSubmit={handleFormSubmit} className={styles.register__form}>
-        <Input label='Name' onChange={update(setName)} value={name} />
         <Input
+          type='text'
+          label='Name'
+          onChange={update(setName)}
+          value={name}
+        />
+        <Input
+          type='text'
           label='E-mail address'
           onChange={update(setEmail)}
           value={email}
