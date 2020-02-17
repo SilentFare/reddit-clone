@@ -1,12 +1,14 @@
 import { connect } from 'react-redux';
 
 import { Discussion } from './Discussion';
-import { fetchDiscussion } from '../../ducks/posts';
+import { fetchPostDiscussion } from '../../ducks/posts';
+import { fetchPostComments } from '../../ducks/comments';
 
 const mapStateToProps = state => ({
-  posts: state.posts.byId
+  postsById: state.posts.byId,
+  commentsByPost: state.comments.byPost
 });
 
-const mapDispatchToProps = { fetchDiscussion };
+const mapDispatchToProps = { fetchPostDiscussion, fetchPostComments };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Discussion);

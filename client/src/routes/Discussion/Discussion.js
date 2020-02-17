@@ -6,16 +6,24 @@ import styles from './Discussion.module.css';
 import Post from '../../components/Post';
 import CommentEditor from '../../components/CommentEditor';
 import Comment from '../../components/Comment';
+import NoComments from '../../components/NoComments';
 
-export const Discussion = ({ fetchDiscussion, posts }) => {
+export const Discussion = ({
+  fetchPostDiscussion,
+  postsById,
+  commentsByPost,
+  fetchPostComments
+}) => {
   const { post_id } = useParams();
 
   useEffect(() => {
-    fetchDiscussion(post_id);
-  }, [fetchDiscussion, post_id]);
+    fetchPostDiscussion(post_id);
+    fetchPostComments(post_id);
+  }, [fetchPostDiscussion, fetchPostComments, post_id]);
 
-  if (posts && posts[post_id]) {
-    const { post } = posts[post_id];
+  if (postsById[post_id] && commentsByPost[post_id]) {
+    const { post } = postsById[post_id];
+    const { comments } = commentsByPost[post_id];
 
     return (
       <div className={styles.discussion}>
@@ -33,7 +41,7 @@ export const Discussion = ({ fetchDiscussion, posts }) => {
             created={post.created_at}
           />
           <CommentEditor />
-          <Comment />
+          {comments.length ? <Comment /> : <NoComments />}
         </div>
       </div>
     );
@@ -42,5 +50,5 @@ export const Discussion = ({ fetchDiscussion, posts }) => {
 };
 
 Discussion.propTypes = {
-  fetchDiscussion: PropTypes.func.isRequired
+  fetchPostDiscussion: PropTypes.func.isRequired
 };
