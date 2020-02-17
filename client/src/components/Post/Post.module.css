@@ -76,6 +76,7 @@
 
 .post__header {
   font-size: 0.8rem;
+  margin-left: 0.5rem;
 }
 
 .post__header > *:not(:last-child) {
@@ -122,6 +123,7 @@
 .post__title {
   font-size: 1.2rem;
   font-weight: 700;
+  margin-left: 0.5rem;
 }
 
 .post__button {

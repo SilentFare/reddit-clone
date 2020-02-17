@@ -174,7 +174,6 @@ export const RichEditor = ({ editor, setEditor }) => {
       </div>
       <Editor
         editorState={editor}
-        placeholder='Enter Text'
         onChange={onChange}
         handleKeyCommand={handleKeyCommand}
         keyBindingFn={keyBindingFunction}

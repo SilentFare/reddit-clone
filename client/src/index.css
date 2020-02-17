@@ -37,9 +37,6 @@ div.public-DraftEditor-content {
   height: 100%;
 }
 
-.public-DraftEditorPlaceholder-inner {
-  position: absolute;
-  padding: 1em;
-  color: grey;
-  pointer-events: none;
+div.public-DraftEditor-content {
+  padding: 0.5rem;
 }
