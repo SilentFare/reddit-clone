@@ -4,6 +4,22 @@ const AppError = require('../utilities/appError');
 const create = async (req, res, next) => {
   const { post_id, parentCommentId, text } = req.body;
   try {
+    const postData = await database
+      .table('posts')
+      .select()
+      .where({ id: post_id });
+    if (postData.length === 0) {
+      throw new AppError('Post not found', 404);
+    }
+    if (parentCommentId) {
+      const commentData = await database
+        .table('comments')
+        .select()
+        .where({ id: parentCommentId });
+      if (commentData.length === 0) {
+        throw new AppError('Parent comment not found', 404);
+      }
+    }
     const newComment = await database.table('comments').insert(
       {
         user_id: req.user.id,

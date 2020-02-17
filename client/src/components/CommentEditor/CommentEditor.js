@@ -9,11 +9,23 @@ import RichEditor from '../RichEditor';
 export const CommentEditor = ({ auth, toggleLogin, toggleRegister }) => {
   const [editor, setEditor] = useState(EditorState.createEmpty());
 
+  const handleFormSubmit = event => {
+    event.preventDefault();
+  };
+
   if (auth) {
     return (
-      <div className={styles.editor__container}>
+      <form
+        className={styles.editor__container}
+        handleSubmit={handleFormSubmit}
+      >
         <RichEditor editor={editor} setEditor={setEditor} />
-      </div>
+        <Button
+          type='submit'
+          className={styles.editor__comment}
+          label='Comment'
+        />
+      </form>
     );
   }
 

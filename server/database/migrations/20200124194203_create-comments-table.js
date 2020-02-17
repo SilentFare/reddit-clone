@@ -15,7 +15,7 @@ exports.up = function(knex) {
       .integer('parent_comment_id')
       .references('id')
       .inTable('comments');
-    table.string('text', 10000).notNullable();
+    table.string('text').notNullable();
     table.timestamps(true, true);
   });
 };

@@ -81,8 +81,9 @@ export const Post = ({
             <MdChatBubble className={styles.comment__icon} />
             <span className={styles.post__comments}>26 comments</span>
           </button>
-          <span className={styles.post__upvote__percent}>{`${upvotePercent *
-            100}% Upvoted`}</span>
+          <span className={styles.post__upvote__percent}>{`${Math.round(
+            upvotePercent * 100
+          )}% Upvoted`}</span>
         </div>
       </div>
     </div>

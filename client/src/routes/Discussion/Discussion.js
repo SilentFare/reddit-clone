@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import styles from './Discussion.module.css';
 import Post from '../../components/Post';
 import CommentEditor from '../../components/CommentEditor';
+import Comment from '../../components/Comment';
 
 export const Discussion = ({ fetchDiscussion, posts }) => {
   const { post_id } = useParams();
@@ -32,6 +33,7 @@ export const Discussion = ({ fetchDiscussion, posts }) => {
             created={post.created_at}
           />
           <CommentEditor />
+          <Comment />
         </div>
       </div>
     );

@@ -19,6 +19,13 @@
 }
 
 .editor__container {
-  width: 90%;
-  margin: auto;
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  margin: 1em auto;
+}
+
+.editor__comment {
+  align-self: flex-end;
+  margin-top: 1em;
 }
