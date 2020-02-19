@@ -1,18 +1,37 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { EditorState, convertToRaw } from 'draft-js';
+import { EditorState, convertToRaw, ContentState } from 'draft-js';
 
 import styles from './CommentEditor.module.css';
 import Button from '../Button';
 import RichEditor from '../RichEditor';
 
-export const CommentEditor = ({ auth, toggleLogin, toggleRegister }) => {
+export const CommentEditor = ({
+  auth,
+  toggleLogin,
+  toggleRegister,
+  create,
+  post_id
+}) => {
   const [editor, setEditor] = useState(
     EditorState.moveFocusToEnd(EditorState.createEmpty())
   );
 
   const handleFormSubmit = event => {
     event.preventDefault();
+
+    const text = convertToRaw(editor.getCurrentContent());
+
+    create({
+      post_id,
+      text
+    });
+    const clearedEditor = EditorState.push(
+      editor,
+      ContentState.createFromText(''),
+      'remove-range'
+    );
+    setEditor(clearedEditor);
   };
 
   if (auth) {

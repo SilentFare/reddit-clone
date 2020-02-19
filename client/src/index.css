@@ -27,16 +27,10 @@ body {
 /* Draft.js */
 
 div.DraftEditor-root {
-  position: relative;
-  overflow-y: auto;
   height: 100%;
 }
 
 div.DraftEditor-editorContainer,
 div.public-DraftEditor-content {
   height: 100%;
-}
-
-div.public-DraftEditor-content {
-  padding: 0.5rem;
 }

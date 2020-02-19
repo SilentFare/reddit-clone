@@ -17,3 +17,9 @@
 .editor__toolbar > *:not(:last-child) {
   margin-right: 1rem;
 }
+
+.editor__container {
+  flex: 1;
+  padding: 1rem;
+  overflow-y: scroll;
+}

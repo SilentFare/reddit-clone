@@ -40,8 +40,20 @@ export const Discussion = ({
             vote={post.vote}
             created={post.created_at}
           />
-          <CommentEditor />
-          {comments.length ? <Comment /> : <NoComments />}
+          <CommentEditor post_id={post_id} />
+          {comments.length ? (
+            comments.map(comment => (
+              <Comment
+                key={comment.id}
+                user={comment.user}
+                text={comment.text}
+                upvotes={comment.upvotes}
+                created={comment.created_at}
+              />
+            ))
+          ) : (
+            <NoComments />
+          )}
         </div>
       </div>
     );

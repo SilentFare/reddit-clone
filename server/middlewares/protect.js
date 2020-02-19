@@ -23,6 +23,6 @@ module.exports = async (req, res, next) => {
     next();
   } catch (err) {
     const error = new AppError('Authentication failed', 403);
-    next(error);
+    next(err);
   }
 };

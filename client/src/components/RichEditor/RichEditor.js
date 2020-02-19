@@ -182,13 +182,15 @@ export const RichEditor = ({ editor, setEditor }) => {
           <FaListOl />
         </ToolbarButton>
       </div>
-      <Editor
-        ref={editorRef}
-        editorState={editor}
-        onChange={onChange}
-        handleKeyCommand={handleKeyCommand}
-        keyBindingFn={keyBindingFunction}
-      />
+      <div className={styles.editor__container}>
+        <Editor
+          ref={editorRef}
+          editorState={editor}
+          onChange={onChange}
+          handleKeyCommand={handleKeyCommand}
+          keyBindingFn={keyBindingFunction}
+        />
+      </div>
     </div>
   );
 };
