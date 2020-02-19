@@ -1,3 +1,5 @@
+import decode from 'jwt-decode';
+
 import { toggleRegister, toggleLogin } from './modals';
 
 // Action types
@@ -87,7 +89,13 @@ export const refreshToken = () => async dispatch => {
     });
     if (response.ok) {
       const responseData = await response.json();
-      localStorage.setItem('token', responseData.token);
+      const { token } = responseData;
+      const decodedToken = decode(token);
+      localStorage.setItem('token', token);
+      setTimeout(async () => {
+        // When the token expires, fetch new access token
+        dispatch(refreshToken());
+      }, decodedToken.exp * 1000 - Date.now() - 1000);
     } else {
       localStorage.removeItem('token');
       dispatch(logout());

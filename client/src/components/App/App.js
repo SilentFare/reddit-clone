@@ -21,15 +21,28 @@ import ScrollRestoration from '../ScrollRestoration';
 export const App = ({ refreshToken, getSession }) => {
   useEffect(() => {
     const auth = async () => {
+      // Get the access token from local storage
       const token = localStorage.getItem('token');
+      // If no token found...
       if (!token) {
+        // ...fetch new access token
         await refreshToken();
       } else {
+        // If token found, decode the token
         const decodedToken = decode(token);
+        // If access token is expired...
         if (decodedToken.exp < Date.now() / 1000) {
+          // ...fetch new access token
           await refreshToken();
+        } else {
+          // If access token is valid, set timeout for the period
+          setTimeout(async () => {
+            // When the token expires, fetch new access token
+            await refreshToken();
+          }, decodedToken.exp * 1000 - Date.now() - 1000);
         }
       }
+      // Fetch session data
       await getSession();
     };
     auth();
