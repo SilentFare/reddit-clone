@@ -7,7 +7,9 @@ import Button from '../Button';
 import RichEditor from '../RichEditor';
 
 export const CommentEditor = ({ auth, toggleLogin, toggleRegister }) => {
-  const [editor, setEditor] = useState(EditorState.createEmpty());
+  const [editor, setEditor] = useState(
+    EditorState.moveFocusToEnd(EditorState.createEmpty())
+  );
 
   const handleFormSubmit = event => {
     event.preventDefault();
@@ -15,10 +17,7 @@ export const CommentEditor = ({ auth, toggleLogin, toggleRegister }) => {
 
   if (auth) {
     return (
-      <form
-        className={styles.editor__container}
-        handleSubmit={handleFormSubmit}
-      >
+      <form className={styles.editor__container} onSubmit={handleFormSubmit}>
         <RichEditor editor={editor} setEditor={setEditor} />
         <Button
           type='submit'

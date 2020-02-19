@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import {
   Editor,
   RichUtils,
+  EditorState,
   getDefaultKeyBinding,
   KeyBindingUtil
 } from 'draft-js';
@@ -21,19 +22,28 @@ import styles from './RichEditor.module.css';
 import ToolbarButton from '../ToolbarButton';
 
 export const RichEditor = ({ editor, setEditor }) => {
+  const editorRef = useRef();
+
   const onChange = editorState => setEditor(editorState);
 
   const toggleInlineStyle = event => {
     event.preventDefault();
+
+    editorRef.current.focus();
     const style = event.currentTarget.getAttribute('data-style');
-    setEditor(RichUtils.toggleInlineStyle(editor, style));
+    setEditor(
+      RichUtils.toggleInlineStyle(EditorState.moveFocusToEnd(editor), style)
+    );
   };
 
   const toggleBlockType = event => {
     event.preventDefault();
 
+    editorRef.current.focus();
     const block = event.currentTarget.getAttribute('data-style');
-    setEditor(RichUtils.toggleBlockType(editor, block));
+    setEditor(
+      RichUtils.toggleBlockType(EditorState.moveFocusToEnd(editor), block)
+    );
   };
 
   const handleKeyCommand = command => {
@@ -173,6 +183,7 @@ export const RichEditor = ({ editor, setEditor }) => {
         </ToolbarButton>
       </div>
       <Editor
+        ref={editorRef}
         editorState={editor}
         onChange={onChange}
         handleKeyCommand={handleKeyCommand}

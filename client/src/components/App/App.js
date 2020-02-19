@@ -16,6 +16,7 @@ import RegisterModal from '../RegisterModal';
 import LoginModal from '../LoginModal';
 import Sidebar from '../Sidebar';
 import CreatePost from '../../routes/CreatePost';
+import ScrollRestoration from '../ScrollRestoration';
 
 export const App = ({ refreshToken, getSession }) => {
   useEffect(() => {
@@ -55,6 +56,9 @@ export const App = ({ refreshToken, getSession }) => {
             <Redirect to='/' />
           </Switch>
         </main>
+        <Route>
+          <ScrollRestoration />
+        </Route>
       </Router>
     </div>
   );
