@@ -1,3 +1,4 @@
+import { RECEIVE_POST_COMMENT } from './comments';
 // Action types
 const TOGGLE_POSTS_FETCHING = 'TOGGLE_POSTS_FETCHING';
 const TOGGLE_POST_FETCHING = 'TOGGLE_POST_FETCHING';
@@ -431,6 +432,32 @@ export const posts = (state = initialState, action) => {
           [action.post.id]: post(state.byId[action.post.id], action)
         }
       };
+    case RECEIVE_POST_COMMENT:
+      // Create copy of the state, instead of directly mutating it
+      const postCommentState = { ...state };
+      // Increase the comment counter of the post by 1
+      postCommentState.byId[action.comment.post_id].post.comments += 1;
+      // If we have the post in a community,...
+      if (
+        action.community in postCommentState.byCommunity &&
+        postCommentState.byCommunity[action.community].byId[
+          action.comment.post_id
+        ]
+      ) {
+        // ...then increase the comment counter of the post by 1
+        postCommentState.byCommunity[action.community].byId[
+          action.comment.post_id
+        ].comments += 1;
+      }
+      // If we have the post on the home page,...
+      if (
+        postCommentState.all &&
+        postCommentState.all.byId[action.comment.post_id]
+      ) {
+        // ...then increase the comment counter of the post by 1
+        postCommentState.all.byId[action.comment.post_id].comments += 1;
+      }
+      return postCommentState;
     default:
       return state;
   }

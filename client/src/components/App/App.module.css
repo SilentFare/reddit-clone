@@ -1,10 +1,17 @@
 .app {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
 }
 
 .main {
+  display: flex;
+  flex-direction: column;
   flex: 1;
   margin-top: 5em;
+}
+
+.main > * {
+  flex: 1;
 }

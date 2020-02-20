@@ -38,9 +38,10 @@ export const Discussion = ({
             upvotes={post.upvotes}
             upvotePercent={post.upvote_percent}
             vote={post.vote}
+            comments={post.comments}
             created={post.created_at}
           />
-          <CommentEditor post_id={post_id} />
+          <CommentEditor post_id={post_id} community={post.community} />
           {comments.length ? (
             comments.map(comment => (
               <Comment

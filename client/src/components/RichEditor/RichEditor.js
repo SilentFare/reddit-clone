@@ -26,14 +26,13 @@ export const RichEditor = ({ editor, setEditor }) => {
 
   const onChange = editorState => setEditor(editorState);
 
-  const toggleInlineStyle = event => {
+  const toggleInlineStyle = async event => {
     event.preventDefault();
 
     editorRef.current.focus();
     const style = event.currentTarget.getAttribute('data-style');
-    setEditor(
-      RichUtils.toggleInlineStyle(EditorState.moveFocusToEnd(editor), style)
-    );
+    await setEditor(EditorState.moveFocusToEnd(editor));
+    await setEditor(RichUtils.toggleInlineStyle(editor, style));
   };
 
   const toggleBlockType = event => {
@@ -182,7 +181,10 @@ export const RichEditor = ({ editor, setEditor }) => {
           <FaListOl />
         </ToolbarButton>
       </div>
-      <div className={styles.editor__container}>
+      <div
+        className={styles.editor__container}
+        onClick={() => editorRef.current.focus()}
+      >
         <Editor
           ref={editorRef}
           editorState={editor}

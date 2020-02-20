@@ -40,6 +40,7 @@ const getAll = async (req, res, next) => {
         'posts.title',
         'posts.text',
         'x.upvotes',
+        'z.count as comments',
         'posts.created_at',
         'posts.updated_at'
       )
@@ -55,6 +56,16 @@ const getAll = async (req, res, next) => {
           .groupBy('post_id')
           .as('x'),
         'x.post_id',
+        'posts.id'
+      )
+      .leftJoin(
+        database
+          .table('comments')
+          .select('post_id')
+          .count('*')
+          .groupBy('post_id')
+          .as('z'),
+        'z.post_id',
         'posts.id'
       );
     if (req.user) {
@@ -91,6 +102,7 @@ const getByCommunity = async (req, res, next) => {
         'posts.title',
         'posts.text',
         'x.upvotes',
+        'z.count as comments',
         'posts.created_at',
         'posts.updated_at'
       )
@@ -106,6 +118,16 @@ const getByCommunity = async (req, res, next) => {
           .groupBy('post_id')
           .as('x'),
         'x.post_id',
+        'posts.id'
+      )
+      .leftJoin(
+        database
+          .table('comments')
+          .select('post_id')
+          .count('*')
+          .groupBy('post_id')
+          .as('z'),
+        'z.post_id',
         'posts.id'
       )
       .where({ 'communities.name': communityName });
@@ -235,6 +257,7 @@ const getOne = async (req, res, next) => {
         'posts.text',
         'x.upvotes',
         'x.upvote_percent',
+        'z.count as comments',
         'posts.created_at',
         'posts.updated_at'
       )
@@ -255,6 +278,16 @@ const getOne = async (req, res, next) => {
           .as('x'),
         'x.post_id',
         'posts.id'
+      )
+      .leftJoin(
+        database
+          .table('comments')
+          .select('post_id')
+          .count('*')
+          .groupBy('post_id')
+          .as('z'),
+        'z.post_id',
+        'posts.id'
       );
     if (req.user) {
       console.log('User', req.user);
@@ -271,7 +304,6 @@ const getOne = async (req, res, next) => {
         .select('y.vote');
     }
     data = await data;
-    console.log('Data', data);
     if (data.length === 0) {
       throw new AppError('Post not found', 404);
     }

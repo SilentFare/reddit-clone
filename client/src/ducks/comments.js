@@ -1,6 +1,6 @@
 // Action types
 const RECEIVE_POST_COMMENTS = 'RECEIVE_POST_COMMENTS';
-const RECEIVE_POST_COMMENT = 'RECEIVE_POST_COMMENT';
+export const RECEIVE_POST_COMMENT = 'RECEIVE_POST_COMMENT';
 
 // Action creators
 const receivePostComments = (comments, post_id) => ({
@@ -9,9 +9,10 @@ const receivePostComments = (comments, post_id) => ({
   post_id
 });
 
-const receivePostComment = comment => ({
+const receivePostComment = (comment, community) => ({
   type: RECEIVE_POST_COMMENT,
-  comment
+  comment,
+  community
 });
 
 export const create = data => async dispatch => {
@@ -27,7 +28,7 @@ export const create = data => async dispatch => {
     });
     if (response.ok) {
       const responseData = await response.json();
-      dispatch(receivePostComment(responseData.comment));
+      dispatch(receivePostComment(responseData.comment, data.community));
     } else {
     }
   } catch (error) {
@@ -81,7 +82,6 @@ export const comments = (state = initialState, action) => {
         }
       };
     case RECEIVE_POST_COMMENT:
-      console.log(action.comment);
       return {
         ...state,
         byPost: {

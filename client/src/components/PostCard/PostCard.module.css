@@ -14,7 +14,7 @@
 }
 
 .post__card__aside {
-  padding: 0.5rem 0 0.5rem 0.5rem;
+  padding: 0.5rem;
 }
 
 .post__card__votes {
@@ -64,7 +64,7 @@
 
 .post__card__main {
   flex: 1;
-  padding: 0.5em 0;
+  padding: 0.5em;
 }
 
 .post__card__main > *:not(:last-child) {
@@ -73,7 +73,6 @@
 
 .post__card__header {
   font-size: 0.8rem;
-  margin-left: 0.5rem;
 }
 
 .post__card__header > *:not(:last-child) {
@@ -120,11 +119,9 @@
 .post__card__title {
   font-size: 1.2rem;
   font-weight: 700;
-  margin-left: 0.5rem;
 }
 
 .post__card__footer {
-  margin-left: 0.5rem;
 }
 
 .post__card__button {

@@ -19,6 +19,7 @@ export const Post = ({
   title,
   text,
   user,
+  comments,
   created
 }) => {
   const contentState = convertFromRaw(JSON.parse(text));
@@ -79,7 +80,9 @@ export const Post = ({
         <div className={styles.post__footer}>
           <button className={styles.post__button}>
             <MdChatBubble className={styles.comment__icon} />
-            <span className={styles.post__comments}>26 comments</span>
+            <span className={styles.post__comments}>
+              {comments || 0} comment{comments !== '1' && 's'}
+            </span>
           </button>
           <span className={styles.post__upvote__percent}>{`${Math.round(
             upvotePercent * 100
@@ -98,6 +101,7 @@ Post.propTypes = {
   created: PropTypes.string.isRequired,
   upvote: PropTypes.func.isRequired,
   downvote: PropTypes.func.isRequired,
+  comments: PropTypes.number.isRequired,
   vote: PropTypes.bool,
   text: PropTypes.string
 };

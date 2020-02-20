@@ -11,7 +11,8 @@ export const CommentEditor = ({
   toggleLogin,
   toggleRegister,
   create,
-  post_id
+  post_id,
+  community
 }) => {
   const [editor, setEditor] = useState(
     EditorState.moveFocusToEnd(EditorState.createEmpty())
@@ -24,7 +25,8 @@ export const CommentEditor = ({
 
     create({
       post_id,
-      text
+      text,
+      community
     });
     const clearedEditor = EditorState.push(
       editor,

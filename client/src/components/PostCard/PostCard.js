@@ -17,6 +17,7 @@ export const PostCard = ({
   upvotes,
   vote,
   created,
+  comments,
   upvote,
   downvote
 }) => {
@@ -88,7 +89,9 @@ export const PostCard = ({
         <div className={styles.post__card__footer}>
           <button className={styles.post__card__button}>
             <MdChatBubble className={styles.comment__icon} />
-            <span className={styles.post__card__comments}>26 comments</span>
+            <span className={styles.post__card__comments}>
+              {comments || 0} comment{comments !== '1' && 's'}
+            </span>
           </button>
         </div>
       </div>
