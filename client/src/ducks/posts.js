@@ -5,9 +5,7 @@ const TOGGLE_POST_FETCHING = 'TOGGLE_POST_FETCHING';
 const SELECT_COMMUNITY = 'SELECT_COMMUNITY';
 const INVALIDATE_POSTS = 'INVALIDATE_POSTS';
 const RECEIVE_POSTS = 'RECEIVE_POSTS';
-const CREATE_VOTE = 'CREATE_VOTE';
-const UPDATE_VOTE = 'UPDATE_VOTE';
-const DELETE_VOTE = 'DELETE_VOTE';
+const RECEIVE_VOTE = 'RECEIVE_VOTE';
 const RECEIVE_POST_DISCUSSION = 'RECEIVE_POST_DISCUSSION';
 
 // Action creators
@@ -37,21 +35,9 @@ export const invalidatePosts = community => ({
   community
 });
 
-export const createVote = (vote, community) => ({
-  type: CREATE_VOTE,
-  vote,
-  community
-});
-
-export const updateVote = (vote, community) => ({
-  type: UPDATE_VOTE,
-  vote,
-  community
-});
-
-export const deleteVote = (vote, community) => ({
-  type: DELETE_VOTE,
-  vote,
+export const receiveVote = (data, community) => ({
+  type: RECEIVE_VOTE,
+  data,
   community
 });
 
@@ -63,19 +49,27 @@ export const receivePostDiscussion = post => ({
 // Async action creators
 export const fetchPosts = community => async dispatch => {
   try {
+    // Get the access token from the local storage.
     const token = localStorage.getItem('token');
+    // If we have a community name, then fetch posts only from it. Otherwise fetch posts from any community.
     const url = `/api/posts/${community ? `community/${community}` : ''}`;
+    // Set initial options of the fetch function
     const opts = {
       method: 'GET'
     };
+    // If we have an access token, then set it as authorization header
     if (token) {
       opts.headers = {
         authorization: `Bearer ${token}`
       };
     }
+    // Wait for the response
     const response = await fetch(url, opts);
+    // If the request was successful,...
     if (response.ok) {
+      // ...then convert the response to JSON data
       const responseData = await response.json();
+      // Save the posts to the redux state
       dispatch(receivePosts(community, responseData.posts));
     }
   } catch (error) {
@@ -119,19 +113,7 @@ export const upvote = (post_id, community) => async dispatch => {
     });
     if (response.ok) {
       const responseData = await response.json();
-      switch (responseData.action) {
-        case 'create':
-          dispatch(createVote(responseData.vote, community));
-          break;
-        case 'update':
-          dispatch(updateVote(responseData.vote, community));
-          break;
-        case 'delete':
-          dispatch(deleteVote(responseData.vote, community));
-          break;
-        default:
-          return;
-      }
+      dispatch(receiveVote(responseData, community));
     }
   } catch (error) {
     console.log(error);
@@ -153,19 +135,7 @@ export const downvote = (post_id, community) => async dispatch => {
     });
     if (response.ok) {
       const responseData = await response.json();
-      switch (responseData.action) {
-        case 'create':
-          dispatch(createVote(responseData.vote, community));
-          break;
-        case 'update':
-          dispatch(updateVote(responseData.vote, community));
-          break;
-        case 'delete':
-          dispatch(deleteVote(responseData.vote, community));
-          break;
-        default:
-          return;
-      }
+      dispatch(receiveVote(responseData, community));
     }
   } catch (error) {
     console.log(error);
@@ -272,159 +242,154 @@ export const posts = (state = initialState, action) => {
           all: community(state.all, action)
         };
       }
-    case CREATE_VOTE:
-      let stateCopy = {
+    case RECEIVE_VOTE:
+      const { data } = action;
+      let receiveUpvoteState = {
         ...state
       };
-      if (state.all && state.all.byId[action.vote.post_id]) {
-        const post = state.all.byId[action.vote.post_id];
-        stateCopy = {
-          ...stateCopy,
+      if (
+        receiveUpvoteState.all &&
+        receiveUpvoteState.all.byId[data.vote.post_id]
+      ) {
+        let temp;
+        switch (data.action) {
+          case 'create':
+            temp = {
+              vote: data.vote.vote,
+              upvotes:
+                receiveUpvoteState.all.byId[data.vote.post_id].upvotes +
+                (data.vote.vote ? 1 : -1)
+            };
+            break;
+          case 'update':
+            temp = {
+              vote: data.vote.vote,
+              upvotes:
+                receiveUpvoteState.all.byId[data.vote.post_id].upvotes +
+                (data.vote.vote ? 2 : -2)
+            };
+            break;
+          case 'delete':
+            temp = {
+              vote: null,
+              upvotes:
+                receiveUpvoteState.all.byId[data.vote.post_id].upvotes +
+                (data.vote.vote ? -1 : 1)
+            };
+            break;
+        }
+        receiveUpvoteState = {
+          ...receiveUpvoteState,
           all: {
-            ...stateCopy.all,
+            ...receiveUpvoteState.all,
             byId: {
-              ...stateCopy.all.byId,
-              [action.vote.post_id]: Object.assign({}, post, {
-                vote: action.vote.vote,
-                upvotes: action.vote.vote
-                  ? post.upvotes === null
-                    ? 1
-                    : parseInt(post.upvotes) + 1
-                  : post.upvotes === null
-                  ? -1
-                  : parseInt(post.upvotes) - 1
-              })
+              ...receiveUpvoteState.all.byId,
+              [data.vote.post_id]: {
+                ...receiveUpvoteState.all.byId[data.vote.post_id],
+                ...temp
+              }
             }
           }
         };
       }
       if (
-        state.byCommunity[action.community] &&
-        state.byCommunity[action.community].byId[action.vote.post_id]
+        receiveUpvoteState.byCommunity[action.community] &&
+        receiveUpvoteState.byCommunity[action.community].byId[data.vote.post_id]
       ) {
-        const post =
-          state.byCommunity[action.community].byId[action.vote.post_id];
-        stateCopy = {
-          ...stateCopy,
+        let temp;
+        switch (data.action) {
+          case 'create':
+            temp = {
+              vote: data.vote.vote,
+              upvotes:
+                receiveUpvoteState.byCommunity[action.community].byId[
+                  data.vote.post_id
+                ].upvotes + (data.vote.vote ? 1 : -1)
+            };
+            break;
+          case 'update':
+            temp = {
+              vote: data.vote.vote,
+              upvotes:
+                receiveUpvoteState.byCommunity[action.community].byId[
+                  data.vote.post_id
+                ].upvotes + (data.vote.vote ? 2 : -2)
+            };
+            break;
+          case 'delete':
+            temp = {
+              vote: null,
+              upvotes:
+                receiveUpvoteState.byCommunity[action.community].byId[
+                  data.vote.post_id
+                ].upvotes + (data.vote.vote ? -1 : 1)
+            };
+            break;
+        }
+        receiveUpvoteState = {
+          ...receiveUpvoteState,
           byCommunity: {
-            ...stateCopy.byCommunity,
+            ...receiveUpvoteState.byCommunity,
             [action.community]: {
-              ...stateCopy.byCommunity[action.community],
+              ...receiveUpvoteState.byCommunity[action.community],
               byId: {
-                ...stateCopy.byCommunity[action.community].byId,
-                [action.vote.post_id]: {
-                  ...post,
-                  vote: action.vote.vote,
-                  upvotes: action.vote.vote
-                    ? post.upvotes === null
-                      ? 1
-                      : parseInt(post.upvotes) + 1
-                    : post.upvotes === null
-                    ? -1
-                    : parseInt(post.upvotes) - 1
+                ...receiveUpvoteState.byCommunity[action.community].byId,
+                [data.vote.post_id]: {
+                  ...receiveUpvoteState.byCommunity[action.community].byId[
+                    data.vote.post_id
+                  ],
+                  ...temp
                 }
               }
             }
           }
         };
       }
-      return stateCopy;
-    case UPDATE_VOTE:
-      let stateCopi = {
-        ...state
-      };
-      if (state.all && state.all.byId[action.vote.post_id]) {
-        const post = state.all.byId[action.vote.post_id];
-        stateCopi = {
-          ...stateCopi,
-          all: {
-            ...stateCopi.all,
-            byId: {
-              ...stateCopi.all.byId,
-              [action.vote.post_id]: Object.assign({}, post, {
-                vote: action.vote.vote,
-                upvotes: action.vote.vote
-                  ? parseInt(post.upvotes) + 2
-                  : parseInt(post.upvotes) - 2
-              })
-            }
-          }
-        };
-      }
-      if (
-        state.byCommunity[action.community] &&
-        state.byCommunity[action.community].byId[action.vote.post_id]
-      ) {
-        const post =
-          state.byCommunity[action.community].byId[action.vote.post_id];
-        stateCopi = {
-          ...stateCopi,
-          byCommunity: {
-            ...stateCopi.byCommunity,
-            [action.community]: {
-              ...stateCopi.byCommunity[action.community],
-              byId: {
-                ...stateCopi.byCommunity[action.community].byId,
-                [action.vote.post_id]: {
-                  ...post,
-                  vote: action.vote.vote,
-                  upvotes: action.vote.vote
-                    ? parseInt(post.upvotes) + 2
-                    : parseInt(post.upvotes) - 2
-                }
+      if (receiveUpvoteState.byId[data.vote.post_id]) {
+        let temp;
+        switch (data.action) {
+          case 'create':
+            temp = {
+              vote: data.vote.vote,
+              upvotes:
+                receiveUpvoteState.byId[data.vote.post_id].post.upvotes +
+                (data.vote.vote ? 1 : -1)
+            };
+            break;
+          case 'update':
+            temp = {
+              vote: data.vote.vote,
+              upvotes:
+                receiveUpvoteState.byId[data.vote.post_id].post.upvotes +
+                (data.vote.vote ? 2 : -2)
+            };
+            break;
+          case 'delete':
+            temp = {
+              vote: null,
+              upvotes:
+                receiveUpvoteState.byId[data.vote.post_id].post.upvotes +
+                (data.vote.vote ? -1 : 1)
+            };
+            break;
+        }
+        receiveUpvoteState = {
+          ...receiveUpvoteState,
+          byId: {
+            ...receiveUpvoteState.byId,
+            [data.vote.post_id]: {
+              ...receiveUpvoteState.byId[data.vote.post_id],
+              post: {
+                ...receiveUpvoteState.byId[data.vote.post_id].post,
+                ...temp
               }
             }
           }
         };
       }
-      return stateCopi;
-    case DELETE_VOTE:
-      let stateCopee = {
-        ...state
-      };
-      if (state.all && state.all.byId[action.vote.post_id]) {
-        const post = state.all.byId[action.vote.post_id];
-        const postCopy = Object.assign({}, post);
-        delete postCopy['vote'];
-        postCopy['upvotes'] =
-          parseInt(postCopy['upvotes']) + (action.vote.vote ? -1 : 1);
-        stateCopee = {
-          ...stateCopee,
-          all: {
-            ...stateCopee.all,
-            byId: {
-              ...stateCopee.all.byId,
-              [action.vote.post_id]: postCopy
-            }
-          }
-        };
-      }
-      if (
-        state.byCommunity[action.community] &&
-        state.byCommunity[action.community].byId[action.vote.post_id]
-      ) {
-        const post =
-          state.byCommunity[action.community].byId[action.vote.post_id];
-        const postCopy = Object.assign({}, post);
-        delete postCopy['vote'];
-        postCopy['upvotes'] =
-          parseInt(postCopy['upvotes']) + (action.vote.vote ? -1 : 1);
-        stateCopee = {
-          ...stateCopee,
-          byCommunity: {
-            ...stateCopee.byCommunity,
-            [action.community]: {
-              ...stateCopee.byCommunity[action.community],
-              byId: {
-                ...stateCopee.byCommunity[action.community].byId,
-                [action.vote.post_id]: postCopy
-              }
-            }
-          }
-        };
-      }
-      return stateCopee;
+      return receiveUpvoteState;
     case RECEIVE_POST_DISCUSSION:
+      // Create new post discussion entry
       return {
         ...state,
         byId: {

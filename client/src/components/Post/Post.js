@@ -101,7 +101,7 @@ Post.propTypes = {
   created: PropTypes.string.isRequired,
   upvote: PropTypes.func.isRequired,
   downvote: PropTypes.func.isRequired,
-  comments: PropTypes.number.isRequired,
+  comments: PropTypes.number,
   vote: PropTypes.bool,
   text: PropTypes.string
 };
