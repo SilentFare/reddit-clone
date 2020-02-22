@@ -2,10 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Editor, EditorState, convertFromRaw } from 'draft-js';
+import { MdChatBubble } from 'react-icons/md';
+import { FaArrowUp, FaArrowDown } from 'react-icons/fa';
 
 import styles from './Comment.module.css';
-import { FaArrowUp, FaArrowDown } from 'react-icons/fa';
-import { MdChatBubble } from 'react-icons/md';
+import ReplyEditor from '../ReplyEditor';
 
 export const Comment = ({
   id,
@@ -58,10 +59,9 @@ export const Comment = ({
           Reply
         </button>
       </div>
-      {children && (
+      {true && (
         <div className={styles.comment__children}>
-          <span>Comment</span>
-          <span>Comment</span>
+          <ReplyEditor />
         </div>
       )}
     </div>

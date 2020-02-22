@@ -1,0 +1,12 @@
+.editor__form {
+  display: flex;
+  flex-direction: column;
+}
+
+.editor__form > *:not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+.editor__submit {
+  align-self: flex-end;
+}
