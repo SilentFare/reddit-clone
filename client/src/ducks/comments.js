@@ -172,8 +172,8 @@ export const comments = (state = initialState, action) => {
             temp = {
               vote: data.vote.vote,
               upvotes:
-                commentVoteState.byPost[post_id].comments[data.vote.comment_id]
-                  .upvotes + (data.vote.vote ? 1 : -1)
+                (commentVoteState.byPost[post_id].comments[data.vote.comment_id]
+                  .upvotes || 0) + (data.vote.vote ? 1 : -1)
             };
             break;
           case 'update':
