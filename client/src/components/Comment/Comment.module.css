@@ -61,10 +61,6 @@
   color: var(--blue);
 }
 
-.comment__upvotes {
-  font-weight: 700;
-}
-
 .vote_red {
   color: var(--red);
 }

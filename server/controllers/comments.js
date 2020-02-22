@@ -50,7 +50,7 @@ const getByPost = async (req, res, next) => {
     if (postData.length === 0) {
       throw new AppError('Post not found', 404);
     }
-    const comments = await database
+    let comments = database
       .table('comments')
       .select('comments.*', 'users.name as user', 'x.upvotes')
       .where({ post_id })
@@ -67,6 +67,20 @@ const getByPost = async (req, res, next) => {
         'x.comment_id',
         'comments.id'
       );
+    if (req.user) {
+      comments
+        .leftJoin(
+          database
+            .table('comment_votes')
+            .select('comment_id', 'vote')
+            .where({ user_id: req.user.id })
+            .as('y'),
+          'y.comment_id',
+          'comments.id'
+        )
+        .select('y.vote');
+    }
+    comments = await comments;
     res.status(200).json({ comments });
   } catch (error) {
     next(error);
@@ -76,12 +90,90 @@ const getByPost = async (req, res, next) => {
 const upvote = async (req, res, next) => {
   const { comment_id } = req.body;
   try {
+    // Check whether comment with id exists
+    const comments = await database
+      .table('comments')
+      .select()
+      .where({ id: comment_id });
+    if (comments.length === 0) {
+      throw new AppError('Comment not found', 404);
+    }
+    // Check whether user already voted for the comment
+    const votes = await database
+      .table('comment_votes')
+      .select()
+      .where({ user_id: req.user.id, comment_id });
+    if (votes.length === 0) {
+      // Create new upvote for the comment
+      const newVote = await database
+        .table('comment_votes')
+        .insert({ user_id: req.user.id, comment_id, vote: true }, '*');
+      return res.status(201).json({ vote: newVote[0], action: 'create' });
+    } else {
+      const commentVote = votes[0];
+      if (commentVote.vote) {
+        const deletedVote = await database
+          .table('comment_votes')
+          .del()
+          .where({ user_id: req.user.id, comment_id })
+          .returning('*');
+        return res.status(200).json({ vote: deletedVote[0], action: 'delete' });
+      } else {
+        const updatedVote = await database
+          .table('comment_votes')
+          .update({ vote: true }, '*')
+          .where({ user_id: req.user.id, comment_id });
+        return res.status(200).json({ vote: updatedVote[0], action: 'update' });
+      }
+    }
   } catch (error) {
     next(error);
   }
 };
 
-const downvote = async (req, res, next) => {};
+const downvote = async (req, res, next) => {
+  const { comment_id } = req.body;
+  try {
+    // Check whether comment with id exists
+    const comments = await database
+      .table('comments')
+      .select()
+      .where({ id: comment_id });
+    if (comments.length === 0) {
+      throw new AppError('Comment not found', 404);
+    }
+    // Check whether user already voted for the comment
+    const votes = await database
+      .table('comment_votes')
+      .select()
+      .where({ user_id: req.user.id, comment_id });
+    if (votes.length === 0) {
+      // Create new downvote of the post
+      const newVote = await database
+        .table('comment_votes')
+        .insert({ user_id: req.user.id, comment_id, vote: false }, '*');
+      return res.status(201).json({ vote: newVote[0], action: 'create' });
+    } else {
+      const commentVote = votes[0];
+      if (!commentVote.vote) {
+        const deletedVote = await database
+          .table('comment_votes')
+          .del()
+          .where({ user_id: req.user.id, comment_id })
+          .returning('*');
+        return res.status(200).json({ vote: deletedVote[0], action: 'delete' });
+      } else {
+        const updatedVote = await database
+          .table('comment_votes')
+          .update({ vote: false }, '*')
+          .where({ user_id: req.user.id, comment_id });
+        return res.status(200).json({ vote: updatedVote[0], action: 'update' });
+      }
+    }
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = {
   create,

@@ -13,6 +13,7 @@ const receiveCommunities = communities => ({
 });
 
 export const fetchCommunities = () => async dispatch => {
+  dispatch(toggleCommunitiesFetching());
   try {
     const response = await fetch('/api/communities', {
       method: 'GET'
@@ -28,7 +29,7 @@ export const fetchCommunities = () => async dispatch => {
 
 const initialState = {
   byId: {},
-  fetching: true
+  fetching: false
 };
 // Reducer
 export const communities = (state = initialState, action) => {

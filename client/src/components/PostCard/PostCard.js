@@ -90,7 +90,7 @@ export const PostCard = ({
           <button className={styles.post__card__button}>
             <MdChatBubble className={styles.comment__icon} />
             <span className={styles.post__card__comments}>
-              {comments || 0} comment{comments !== '1' && 's'}
+              {comments || 0} comment{comments !== 1 && 's'}
             </span>
           </button>
         </div>

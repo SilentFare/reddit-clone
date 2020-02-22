@@ -42,12 +42,15 @@ export const Discussion = ({
             created={post.created_at}
           />
           <CommentEditor post_id={post_id} community={post.community} />
-          {comments.length ? (
-            comments.map(comment => (
+          {Object.values(comments).length ? (
+            Object.values(comments).map(comment => (
               <Comment
                 key={comment.id}
+                id={comment.id}
+                post_id={post_id}
                 user={comment.user}
                 text={comment.text}
+                vote={comment.vote}
                 upvotes={comment.upvotes}
                 created={comment.created_at}
               />

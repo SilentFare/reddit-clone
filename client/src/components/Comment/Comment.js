@@ -10,12 +10,12 @@ import { MdChatBubble } from 'react-icons/md';
 export const Comment = ({
   id,
   user,
-  community,
   text,
   vote,
   upvotes,
   upvote,
   downvote,
+  post_id,
   created,
   children
 }) => {
@@ -28,20 +28,14 @@ export const Comment = ({
         <div className={styles.comment__votes}>
           <button
             className={`${styles.comment__vote} ${vote && styles.vote_red}`}
-            onClick={() => upvote(id, community)}
+            onClick={() => upvote(id, post_id)}
           >
             <FaArrowUp />
           </button>
-          <span
-            className={`${styles.comment__upvotes} ${vote &&
-              styles.vote_red} ${vote === false && styles.vote_blue}`}
-          >
-            {upvotes || 0}
-          </span>
           <button
             className={`${styles.comment__vote} ${vote === false &&
               styles.vote_blue}`}
-            onClick={() => downvote(id, community)}
+            onClick={() => downvote(id, post_id)}
           >
             <FaArrowDown />
           </button>

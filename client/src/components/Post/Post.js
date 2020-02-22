@@ -81,7 +81,7 @@ export const Post = ({
           <button className={styles.post__button}>
             <MdChatBubble className={styles.comment__icon} />
             <span className={styles.post__comments}>
-              {comments || 0} comment{comments !== '1' && 's'}
+              {comments || 0} comment{comments !== 1 && 's'}
             </span>
           </button>
           <span className={styles.post__upvote__percent}>{`${Math.round(

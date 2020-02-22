@@ -5,7 +5,7 @@ const TOGGLE_POST_FETCHING = 'TOGGLE_POST_FETCHING';
 const SELECT_COMMUNITY = 'SELECT_COMMUNITY';
 const INVALIDATE_POSTS = 'INVALIDATE_POSTS';
 const RECEIVE_POSTS = 'RECEIVE_POSTS';
-const RECEIVE_VOTE = 'RECEIVE_VOTE';
+const RECEIVE_POST_VOTE = 'RECEIVE_POST_VOTE';
 const RECEIVE_POST_DISCUSSION = 'RECEIVE_POST_DISCUSSION';
 
 // Action creators
@@ -35,8 +35,8 @@ export const invalidatePosts = community => ({
   community
 });
 
-export const receiveVote = (data, community) => ({
-  type: RECEIVE_VOTE,
+export const receivePostVote = (data, community) => ({
+  type: RECEIVE_POST_VOTE,
   data,
   community
 });
@@ -113,7 +113,7 @@ export const upvote = (post_id, community) => async dispatch => {
     });
     if (response.ok) {
       const responseData = await response.json();
-      dispatch(receiveVote(responseData, community));
+      dispatch(receivePostVote(responseData, community));
     }
   } catch (error) {
     console.log(error);
@@ -135,7 +135,7 @@ export const downvote = (post_id, community) => async dispatch => {
     });
     if (response.ok) {
       const responseData = await response.json();
-      dispatch(receiveVote(responseData, community));
+      dispatch(receivePostVote(responseData, community));
     }
   } catch (error) {
     console.log(error);
@@ -242,7 +242,7 @@ export const posts = (state = initialState, action) => {
           all: community(state.all, action)
         };
       }
-    case RECEIVE_VOTE:
+    case RECEIVE_POST_VOTE:
       const { data } = action;
       let receiveUpvoteState = {
         ...state
@@ -277,6 +277,8 @@ export const posts = (state = initialState, action) => {
                 (data.vote.vote ? -1 : 1)
             };
             break;
+          default:
+            return;
         }
         receiveUpvoteState = {
           ...receiveUpvoteState,
@@ -325,6 +327,8 @@ export const posts = (state = initialState, action) => {
                 ].upvotes + (data.vote.vote ? -1 : 1)
             };
             break;
+          default:
+            return;
         }
         receiveUpvoteState = {
           ...receiveUpvoteState,
@@ -372,6 +376,8 @@ export const posts = (state = initialState, action) => {
                 (data.vote.vote ? -1 : 1)
             };
             break;
+          default:
+            return;
         }
         receiveUpvoteState = {
           ...receiveUpvoteState,

@@ -24,6 +24,7 @@ export const Posts = ({ fetchPosts, posts }) => {
             title={post.title}
             text={post.text}
             upvotes={post.upvotes}
+            comments={post.comments}
             vote={post.vote}
             created={post.created_at}
           />

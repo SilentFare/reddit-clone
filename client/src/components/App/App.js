@@ -23,12 +23,9 @@ export const App = ({ refreshToken, getSession }) => {
     const auth = async () => {
       // Get the access token from local storage
       const token = localStorage.getItem('token');
-      // If no token found...
-      if (!token) {
-        // ...fetch new access token
-        await refreshToken();
-      } else {
-        // If token found, decode the token
+      // If token found,...
+      if (token) {
+        // ...then decode the token
         const decodedToken = decode(token);
         // If access token is expired...
         if (decodedToken.exp < Date.now() / 1000) {
@@ -41,9 +38,9 @@ export const App = ({ refreshToken, getSession }) => {
             await refreshToken();
           }, decodedToken.exp * 1000 - Date.now() - 1000);
         }
+        // Fetch session data
+        await getSession();
       }
-      // Fetch session data
-      await getSession();
     };
     auth();
   }, [refreshToken, getSession]);

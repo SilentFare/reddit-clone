@@ -5,7 +5,6 @@ import { toggleRegister, toggleLogin } from './modals';
 // Action types
 const TOGGLE_USER_FETCHING = 'TOGGLE_USER_FETCHING';
 const RECEIVE_SESSION = 'RECEIVE_SESSION';
-const CLEAR_SESSION = 'CLEAR_SESSION';
 const LOGOUT = 'LOGOUT';
 
 // Action creators
@@ -16,10 +15,6 @@ const toggleFetching = () => ({
 const receiveSession = session => ({
   type: RECEIVE_SESSION,
   session
-});
-
-const clearSession = () => ({
-  type: CLEAR_SESSION
 });
 
 export const register = (data, clearForm) => async dispatch => {
@@ -59,6 +54,7 @@ export const login = (data, clearForm) => async dispatch => {
       localStorage.setItem('token', responseData.token);
       dispatch(receiveSession(responseData.user));
       dispatch(toggleLogin());
+      window.location.href = '/';
       clearForm();
     }
   } catch (error) {
@@ -73,8 +69,8 @@ export const logout = () => async dispatch => {
       credentials: 'include'
     });
     if (response.ok) {
-      dispatch(clearSession());
       localStorage.removeItem('token');
+      window.location.href = '/';
     }
   } catch (error) {
     console.log(error);
@@ -107,6 +103,7 @@ export const refreshToken = () => async dispatch => {
 
 export const getSession = () => async dispatch => {
   try {
+    dispatch(toggleFetching());
     const token = localStorage.getItem('token');
     if (token) {
       const response = await fetch('/api/users', {
@@ -120,18 +117,18 @@ export const getSession = () => async dispatch => {
         dispatch(receiveSession(responseData.user));
       } else {
         // Error
+        dispatch(toggleFetching());
       }
     }
   } catch (error) {
     console.log(error);
   }
-  // dispatch(toggleFetching());
 };
 
 const initialState = {
   session: {},
   auth: false,
-  fetching: true
+  fetching: false
 };
 // Reducer
 export const user = (state = initialState, action) => {
@@ -145,11 +142,6 @@ export const user = (state = initialState, action) => {
       return {
         session: action.session,
         auth: !!action.session,
-        fetching: false
-      };
-    case CLEAR_SESSION:
-      return {
-        ...initialState,
         fetching: false
       };
     case LOGOUT:
