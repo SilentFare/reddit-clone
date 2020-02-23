@@ -1,17 +1,23 @@
 .comment {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  grid-template-rows: auto 1fr auto;
-  gap: 0.5em 1em;
-  padding: 0.5em;
+  display: flex;
 }
 
 .comment__sidebar {
-  grid-row: 1/-1;
-  grid-column: 1/2;
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 0.5rem;
+}
+
+.comment__main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0;
+}
+
+.comment__main > *:not(:last-child) {
+  margin-bottom: 0.5rem;
 }
 
 .comment__votes {
@@ -120,7 +126,11 @@
   margin-right: 0.2em;
 }
 
-.comment__children {
-  grid-row: 4/-1;
-  grid-column: 2/-1;
+.comment__expand {
+  margin: 0 0.3rem;
+}
+
+.comment__expand:hover {
+  cursor: pointer;
+  color: var(--blue);
 }
