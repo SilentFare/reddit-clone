@@ -11,8 +11,7 @@ export const CommentEditor = ({
   toggleLogin,
   toggleRegister,
   create,
-  post_id,
-  community
+  post_id
 }) => {
   const [editor, setEditor] = useState(
     EditorState.moveFocusToEnd(EditorState.createEmpty())
@@ -25,15 +24,12 @@ export const CommentEditor = ({
 
     create({
       post_id,
-      text,
-      community
+      text
     });
-    const clearedEditor = EditorState.push(
-      editor,
-      ContentState.createFromText(''),
-      'remove-range'
+
+    setEditor(
+      EditorState.push(editor, ContentState.createFromText(''), 'remove-range')
     );
-    setEditor(clearedEditor);
   };
 
   if (auth) {

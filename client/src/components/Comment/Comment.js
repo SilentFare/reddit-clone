@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { Editor, EditorState, convertFromRaw } from 'draft-js';
@@ -7,6 +7,7 @@ import { FaArrowUp, FaArrowDown } from 'react-icons/fa';
 
 import styles from './Comment.module.css';
 import ReplyEditor from '../ReplyEditor';
+import CommentContainer from './CommentContainer';
 
 export const Comment = ({
   id,
@@ -20,8 +21,23 @@ export const Comment = ({
   created,
   children
 }) => {
+  const [showEditor, setShowEditor] = useState(false);
   const contentState = convertFromRaw(JSON.parse(text));
   const editorState = EditorState.createWithContent(contentState);
+
+  const nestedComments = (children || []).map(comment => (
+    <CommentContainer
+      key={comment.id}
+      id={comment.id}
+      post_id={post_id}
+      user={comment.user}
+      text={comment.text}
+      vote={comment.vote}
+      upvotes={comment.upvotes}
+      children={comment.children}
+      created={comment.created_at}
+    />
+  ));
 
   return (
     <div className={styles.comment}>
@@ -54,16 +70,18 @@ export const Comment = ({
       </div>
       <Editor editorState={editorState} readOnly={true} />
       <div className={styles.comment__footer}>
-        <button className={styles.comment__button}>
+        <button
+          className={styles.comment__button}
+          onClick={() => setShowEditor(!showEditor)}
+        >
           <MdChatBubble className={styles.comment__reply__icon} />
           Reply
         </button>
       </div>
-      {true && (
-        <div className={styles.comment__children}>
-          <ReplyEditor />
-        </div>
-      )}
+      <div className={styles.comment__children}>
+        <ReplyEditor show={showEditor} post_id={post_id} parentCommentId={id} />
+        {nestedComments}
+      </div>
     </div>
   );
 };

@@ -7,6 +7,7 @@ import Post from '../../components/Post';
 import CommentEditor from '../../components/CommentEditor';
 import Comment from '../../components/Comment';
 import NoComments from '../../components/NoComments';
+import { deepCopy } from '../../utilities/deepCopy';
 
 export const Discussion = ({
   fetchPostDiscussion,
@@ -20,6 +21,27 @@ export const Discussion = ({
     fetchPostDiscussion(post_id);
     fetchPostComments(post_id);
   }, [fetchPostDiscussion, fetchPostComments, post_id]);
+
+  function nestComments(commentList) {
+    const listCopy = deepCopy(commentList);
+    const commentMap = {};
+
+    // move all the comments into a map of id => comment
+    listCopy.forEach(comment => (commentMap[comment.id] = comment));
+
+    // iterate over the comments again and correctly nest the children
+    listCopy.forEach(comment => {
+      if (comment.parent_comment_id !== null) {
+        const parent = commentMap[comment.parent_comment_id];
+        (parent.children = parent.children || []).push(comment);
+      }
+    });
+
+    // filter the list to return a list of correctly nested comments
+    return Object.values(commentMap).filter(
+      comment => comment.parent_comment_id === null
+    );
+  }
 
   if (postsById[post_id] && commentsByPost[post_id]) {
     const { post } = postsById[post_id];
@@ -43,7 +65,7 @@ export const Discussion = ({
           />
           <CommentEditor post_id={post_id} community={post.community} />
           {Object.values(comments).length ? (
-            Object.values(comments).map(comment => (
+            nestComments(Object.values(comments)).map(comment => (
               <Comment
                 key={comment.id}
                 id={comment.id}
@@ -52,6 +74,7 @@ export const Discussion = ({
                 text={comment.text}
                 vote={comment.vote}
                 upvotes={comment.upvotes}
+                children={comment.children}
                 created={comment.created_at}
               />
             ))

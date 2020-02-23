@@ -36,7 +36,7 @@ export const create = data => async dispatch => {
     });
     if (response.ok) {
       const responseData = await response.json();
-      dispatch(receivePostComment(responseData.comment, data.community));
+      dispatch(receivePostComment(responseData.comment));
     } else {
     }
   } catch (error) {

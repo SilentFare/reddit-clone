@@ -20,6 +20,7 @@ const create = async (req, res, next) => {
         throw new AppError('Parent comment not found', 404);
       }
     }
+    console.log('Parent', parentCommentId);
     const commentArray = await database.table('comments').insert(
       {
         user_id: req.user.id,
