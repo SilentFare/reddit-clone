@@ -17,17 +17,22 @@ export const Sidebar = ({
   }, [fetchCommunities]);
 
   return (
-    <aside className={`${styles.sidebar} ${show && styles.sidebar_show}`}>
-      <div className={styles.sidebar__header}>
-        <HamburgerButton onClick={toggleSidebar} show={show} />
-        <Logo />
-      </div>
-      <div className={styles.sidebar__communities}>
-        {Object.values(communities).map(community => (
-          <CommunityLink key={community.name} name={community.name} />
-        ))}
-      </div>
-    </aside>
+    <>
+      <aside className={`${styles.sidebar} ${show && styles.sidebar_show}`}>
+        <div className={styles.sidebar__header}>
+          <HamburgerButton onClick={toggleSidebar} show={show} />
+          <Logo />
+        </div>
+        <div className={styles.sidebar__communities}>
+          {Object.values(communities).map(community => (
+            <CommunityLink key={community.name} name={community.name} />
+          ))}
+        </div>
+      </aside>
+      {show && (
+        <div className={styles.sidebar__backdrop} onClick={toggleSidebar} />
+      )}
+    </>
   );
 };
 

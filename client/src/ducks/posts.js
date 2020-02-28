@@ -7,6 +7,9 @@ const INVALIDATE_POSTS = 'INVALIDATE_POSTS';
 const RECEIVE_POSTS = 'RECEIVE_POSTS';
 const RECEIVE_POST_VOTE = 'RECEIVE_POST_VOTE';
 const RECEIVE_POST_DISCUSSION = 'RECEIVE_POST_DISCUSSION';
+const RECEIVE_USER_POSTS = 'RECEIVE_USER_POSTS';
+const TOGGLE_USER_POSTS_FETCHING = 'TOGGLE_USER_POSTS_FETCHING';
+const INVALIDATE_USER_POSTS = 'INVALIDATE_USER_POSTS';
 
 // Action creators
 export const togglePostsFetching = community => ({
@@ -44,6 +47,12 @@ export const receivePostVote = (data, community) => ({
 export const receivePostDiscussion = post => ({
   type: RECEIVE_POST_DISCUSSION,
   post
+});
+
+export const receiveUserPosts = (posts, user) => ({
+  type: RECEIVE_USER_POSTS,
+  posts,
+  user
 });
 
 // Async action creators
@@ -92,6 +101,27 @@ export const fetchPostDiscussion = post_id => async dispatch => {
     if (response.ok) {
       const responseData = await response.json();
       dispatch(receivePostDiscussion(responseData.post));
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const fetchUserPosts = userName => async dispatch => {
+  try {
+    const token = localStorage.getItem('token');
+    const opts = {
+      method: 'GET'
+    };
+    if (token) {
+      opts.headers = {
+        authorization: `Bearer ${token}`
+      };
+    }
+    const response = await fetch(`/api/posts/user/${userName}`, opts);
+    if (response.ok) {
+      const responseData = await response.json();
+      dispatch(receiveUserPosts(responseData.posts, userName));
     }
   } catch (error) {
     console.log(error);
@@ -155,7 +185,7 @@ export const createPost = data => async dispatch => {
     });
     if (response.ok) {
       const responseData = await response.json();
-      console.log('Response Data', responseData);
+      console.log(responseData);
     }
   } catch (error) {
     console.log(error);
@@ -194,6 +224,37 @@ const community = (
   }
 };
 
+const user = (
+  state = { byId: {}, invalidate: false, fetching: true },
+  action
+) => {
+  switch (action.type) {
+    case TOGGLE_USER_POSTS_FETCHING:
+      return {
+        ...state,
+        fetching: !state.fetching
+      };
+    case RECEIVE_USER_POSTS:
+      const posts = action.posts.reduce((obj, post) => {
+        obj[post.id] = post;
+        return obj;
+      }, {});
+      return {
+        ...state,
+        invalidate: false,
+        fetching: false,
+        byId: posts
+      };
+    case INVALIDATE_USER_POSTS:
+      return {
+        ...state,
+        invalidate: true
+      };
+    default:
+      return state;
+  }
+};
+
 const post = (
   state = { post: {}, invalidate: false, fetching: true },
   action
@@ -211,8 +272,9 @@ const post = (
 };
 
 const initialState = {
+  byId: {},
   byCommunity: {},
-  byId: {}
+  byUser: {}
 };
 // Reducer
 export const posts = (state = initialState, action) => {
@@ -429,6 +491,14 @@ export const posts = (state = initialState, action) => {
         postCommentState.all.byId[action.comment.post_id].comments += 1;
       }
       return postCommentState;
+    case RECEIVE_USER_POSTS:
+      return {
+        ...state,
+        byUser: {
+          ...state.byUser,
+          [action.user]: user(state.byUser[action.user], action)
+        }
+      };
     default:
       return state;
   }

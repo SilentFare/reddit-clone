@@ -35,9 +35,17 @@
   padding: 1em;
   border-radius: 3px;
   overflow-y: scroll;
-  background: var(--lighter-black);
+  background: var(--lighter-grey);
 }
 
 .sidebar__communities > *:not(:last-child) {
   margin-bottom: 1em;
+}
+
+.sidebar__backdrop {
+  position: fixed;
+  height: 100vh;
+  width: 100vw;
+  background: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
 }

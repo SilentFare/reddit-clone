@@ -13,6 +13,7 @@ router
 router.post('/upvote', protect, posts.upvote);
 router.post('/downvote', protect, posts.downvote);
 router.get('/community/:communityName', session, posts.getByCommunity);
+router.get('/user/:userName', session, posts.getByUser);
 router.route('/:post_id').get(session, posts.getOne);
 
 module.exports = router;

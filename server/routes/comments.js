@@ -8,6 +8,7 @@ const router = Router();
 
 router.route('/').post(protect, comments.create);
 router.get('/post/:post_id', session, comments.getByPost);
+router.get('/user/:userName', session, comments.getByUser);
 router.post('/upvote', protect, comments.upvote);
 router.post('/downvote', protect, comments.downvote);
 

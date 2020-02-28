@@ -77,12 +77,12 @@
 
 .comment__collapse {
   flex: 1;
-  background: var(--lighter-grey);
-  width: 4px;
+  background: var(--white);
+  width: 2px;
 }
 
 .comment__collapse:hover {
-  background: var(--white);
+  background: var(--blue);
   cursor: pointer;
 }
 
@@ -97,6 +97,7 @@
 }
 
 .comment__user {
+  text-decoration: none;
   color: var(--blue);
 }
 

@@ -1,0 +1,22 @@
+.user__header {
+  display: flex;
+  padding: 0 2rem;
+  background: var(--blue);
+}
+
+.user__header > *:not(:last-child) {
+  margin-right: 1rem;
+}
+
+.user__header__section {
+  color: var(--black);
+  font-weight: 700;
+  padding: 1em;
+  cursor: pointer;
+  border-bottom: 5px solid transparent;
+  text-decoration: none;
+}
+
+.section_underline {
+  border-bottom: 5px solid var(--black);
+}

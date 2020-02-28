@@ -151,6 +151,69 @@ const getByCommunity = async (req, res, next) => {
   }
 };
 
+const getByUser = async (req, res, next) => {
+  const { userName } = req.params;
+  try {
+    let posts = database
+      .table('posts')
+      .select(
+        'posts.id',
+        'posts.user_id',
+        'users.name as user',
+        'posts.community_id',
+        'communities.name as community',
+        'posts.title',
+        'posts.text',
+        'x.upvotes',
+        'z.count as comments',
+        'posts.created_at',
+        'posts.updated_at'
+      )
+      .leftJoin('users', 'posts.user_id', 'users.id')
+      .leftJoin('communities', 'posts.community_id', 'communities.id')
+      .leftJoin(
+        database
+          .table('post_votes')
+          .select(
+            'post_id',
+            database.raw('SUM(CASE WHEN vote THEN 1 ELSE -1 END) as upvotes')
+          )
+          .groupBy('post_id')
+          .as('x'),
+        'x.post_id',
+        'posts.id'
+      )
+      .leftJoin(
+        database
+          .table('comments')
+          .select('post_id')
+          .count('*')
+          .groupBy('post_id')
+          .as('z'),
+        'z.post_id',
+        'posts.id'
+      )
+      .where({ 'users.name': userName });
+    if (req.user) {
+      posts
+        .leftJoin(
+          database
+            .table('post_votes')
+            .select('post_id', 'vote')
+            .where({ user_id: req.user.id })
+            .as('y'),
+          'y.post_id',
+          'posts.id'
+        )
+        .select('y.vote');
+    }
+    posts = await posts;
+    res.status(200).json({ posts });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const upvote = async (req, res, next) => {
   const { post_id } = req.body;
   try {
@@ -317,6 +380,7 @@ module.exports = {
   create,
   getAll,
   getByCommunity,
+  getByUser,
   upvote,
   downvote,
   getOne

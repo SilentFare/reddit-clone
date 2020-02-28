@@ -1,7 +1,8 @@
 // Action types
 const RECEIVE_POST_COMMENTS = 'RECEIVE_POST_COMMENTS';
-export const RECEIVE_POST_COMMENT = 'RECEIVE_POST_COMMENT';
 const RECEIVE_COMMENT_VOTE = 'RECEIVE_COMMENT_VOTE';
+const RECEIVE_USER_COMMENTS = 'RECEIVE_USER_COMMENTS';
+export const RECEIVE_POST_COMMENT = 'RECEIVE_POST_COMMENT';
 
 // Action creators
 const receivePostComments = (comments, post_id) => ({
@@ -20,6 +21,12 @@ const receiveCommentVote = (data, post_id) => ({
   type: RECEIVE_COMMENT_VOTE,
   data,
   post_id
+});
+
+const receiveUserComments = (comments, userName) => ({
+  type: RECEIVE_USER_COMMENTS,
+  comments,
+  userName
 });
 
 // Async action creators
@@ -59,6 +66,27 @@ export const fetchPostComments = post_id => async dispatch => {
     if (response.ok) {
       const responseData = await response.json();
       dispatch(receivePostComments(responseData.comments, post_id));
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const fetchUserComments = userName => async dispatch => {
+  try {
+    const token = localStorage.getItem('token');
+    const opts = {
+      method: 'GET'
+    };
+    if (token) {
+      opts.headers = {
+        authorization: `Bearer ${token}`
+      };
+    }
+    const response = await fetch(`/api/comments/user/${userName}`, opts);
+    if (response.ok) {
+      const responseData = await response.json();
+      dispatch(receiveUserComments(responseData.comments, userName));
     }
   } catch (error) {
     console.error(error);
@@ -137,7 +165,26 @@ const post = (
   }
 };
 
-const initialState = { byPost: {} };
+const user = (
+  state = { comments: {}, invalidate: false, fetching: true },
+  action
+) => {
+  switch (action.type) {
+    case RECEIVE_USER_COMMENTS:
+      return {
+        comments: action.comments.reduce((acc, curr) => {
+          acc[curr.id] = curr;
+          return acc;
+        }, {}),
+        invalidate: false,
+        fetching: false
+      };
+    default:
+      return state;
+  }
+};
+
+const initialState = { byPost: {}, byUser: {} };
 // Reducer
 export const comments = (state = initialState, action) => {
   switch (action.type) {
@@ -214,6 +261,14 @@ export const comments = (state = initialState, action) => {
         };
       }
       return commentVoteState;
+    case RECEIVE_USER_COMMENTS:
+      return {
+        ...state,
+        byUser: {
+          ...state.byUser,
+          [action.userName]: user(state.byUser[action.userName], action)
+        }
+      };
     default:
       return state;
   }

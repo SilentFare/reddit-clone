@@ -17,6 +17,7 @@ import LoginModal from '../LoginModal';
 import Sidebar from '../Sidebar';
 import CreatePost from '../../routes/CreatePost';
 import ScrollRestoration from '../ScrollRestoration';
+import User from '../../routes/User';
 
 export const App = ({ refreshToken, getSession }) => {
   useEffect(() => {
@@ -62,6 +63,9 @@ export const App = ({ refreshToken, getSession }) => {
             </Route>
             <Route path='/submit'>
               <CreatePost />
+            </Route>
+            <Route path='/u/:userName/:userSection?'>
+              <User />
             </Route>
             <Redirect to='/' />
           </Switch>

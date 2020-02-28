@@ -88,6 +88,56 @@ const getByPost = async (req, res, next) => {
   }
 };
 
+const getByUser = async (req, res, next) => {
+  const { userName } = req.params;
+  try {
+    if (!userName) {
+      throw new AppError('User name not found', 422);
+    }
+    const userData = await database
+      .table('users')
+      .select()
+      .where({ name: userName });
+    if (userData.length === 0) {
+      throw new AppError('User not found', 404);
+    }
+    let comments = database
+      .table('comments')
+      .select('comments.*', 'users.name as user', 'x.upvotes')
+      .leftJoin('users', 'users.id', 'comments.user_id')
+      .leftJoin(
+        database
+          .table('comment_votes')
+          .select(
+            'comment_id',
+            database.raw('SUM(CASE WHEN vote THEN 1 ELSE -1 END) as upvotes')
+          )
+          .groupBy('comment_id')
+          .as('x'),
+        'x.comment_id',
+        'comments.id'
+      )
+      .where('users.name', userName);
+    if (req.user) {
+      comments
+        .leftJoin(
+          database
+            .table('comment_votes')
+            .select('comment_id', 'vote')
+            .where({ user_id: req.user.id })
+            .as('y'),
+          'y.comment_id',
+          'comments.id'
+        )
+        .select('y.vote');
+    }
+    comments = await comments;
+    res.status(200).json({ comments });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const upvote = async (req, res, next) => {
   const { comment_id } = req.body;
   try {
@@ -179,6 +229,7 @@ const downvote = async (req, res, next) => {
 module.exports = {
   create,
   getByPost,
+  getByUser,
   upvote,
   downvote
 };

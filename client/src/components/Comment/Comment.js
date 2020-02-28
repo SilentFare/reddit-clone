@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
+import { Link } from 'react-router-dom';
 import { Editor, EditorState, convertFromRaw } from 'draft-js';
 import { MdChatBubble } from 'react-icons/md';
 import { FaArrowUp, FaArrowDown, FaPlusCircle } from 'react-icons/fa';
@@ -74,7 +75,9 @@ export const Comment = ({
       </div>
       <div className={styles.comment__main}>
         <div className={styles.comment__header}>
-          <span className={styles.comment__user}>{user}</span>
+          <Link to={`/u/${user}`} className={styles.comment__user}>
+            {user}
+          </Link>
           <span className={styles.comment__points}>
             {upvotes || 0} point{upvotes !== 1 && 's'}
           </span>
@@ -107,4 +110,15 @@ export const Comment = ({
   );
 };
 
-Comment.propTypes = {};
+Comment.propTypes = {
+  id: PropTypes.number.isRequired,
+  user: PropTypes.string.isRequired,
+  text: PropTypes.string.isRequired,
+  upvote: PropTypes.func.isRequired,
+  downvote: PropTypes.func.isRequired,
+  post_id: PropTypes.string.isRequired,
+  created: PropTypes.string.isRequired,
+  upvotes: PropTypes.number,
+  children: PropTypes.array,
+  vote: PropTypes.bool
+};
