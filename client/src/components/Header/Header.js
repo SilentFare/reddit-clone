@@ -14,7 +14,8 @@ export const Header = ({
   toggleSidebar,
   auth,
   fetching,
-  logout
+  logout,
+  location
 }) => {
   return (
     <div className={styles.header}>
@@ -32,7 +33,10 @@ export const Header = ({
               <Link to='/user'>
                 <FaUser className={styles.header__icon} />
               </Link>
-              <Button label='Logout' onClick={logout} />
+              <Button
+                label='Logout'
+                onClick={() => logout(location.pathname)}
+              />
             </>
           ) : (
             <>

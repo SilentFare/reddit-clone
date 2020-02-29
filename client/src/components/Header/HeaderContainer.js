@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 import { Header } from './Header';
 import { toggleRegister, toggleLogin, toggleSidebar } from '../../ducks/modals';
@@ -16,4 +17,4 @@ const mapDispatchToProps = {
   logout
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(Header));

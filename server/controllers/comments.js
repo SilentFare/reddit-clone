@@ -103,7 +103,14 @@ const getByUser = async (req, res, next) => {
     }
     let comments = database
       .table('comments')
-      .select('comments.*', 'users.name as user', 'x.upvotes')
+      .select(
+        'comments.*',
+        'users.name as user',
+        'x.upvotes',
+        'posts.title as post_title',
+        'post_user.name as post_user_name',
+        'communities.name as community'
+      )
       .leftJoin('users', 'users.id', 'comments.user_id')
       .leftJoin(
         database
@@ -117,6 +124,9 @@ const getByUser = async (req, res, next) => {
         'x.comment_id',
         'comments.id'
       )
+      .leftJoin('posts', 'posts.id', 'comments.post_id')
+      .leftJoin('communities', 'communities.id', 'posts.community_id')
+      .leftJoin('users as post_user', 'post_user.id', 'posts.user_id')
       .where('users.name', userName);
     if (req.user) {
       comments

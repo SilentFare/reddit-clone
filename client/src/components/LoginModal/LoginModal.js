@@ -6,7 +6,13 @@ import Modal from '../Modal';
 import Input from '../Input';
 import Button from '../Button';
 
-export const LoginModal = ({ show, toggleLogin, toggleRegister, login }) => {
+export const LoginModal = ({
+  show,
+  toggleLogin,
+  toggleRegister,
+  login,
+  location
+}) => {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
 
@@ -30,7 +36,8 @@ export const LoginModal = ({ show, toggleLogin, toggleRegister, login }) => {
         name,
         password
       },
-      clearForm
+      clearForm,
+      location.pathname
     );
   };
 

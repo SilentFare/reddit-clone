@@ -1,0 +1,88 @@
+.user__comment {
+  background: var(--lighter-grey);
+  border-radius: 3px;
+  width: 60vw;
+}
+
+.user__comment > *:not(:last-child) {
+  border-bottom: 1px solid var(--blue);
+}
+
+.user__post {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  border-radius: 3px 3px 0 0;
+  border: 1px solid transparent;
+  color: var(--white);
+  font-size: 0.8rem;
+}
+
+.user__post > *:not(:last-child) {
+  margin-right: 0.5rem;
+}
+
+.user__post:hover {
+  border: 1px solid var(--blue);
+}
+
+.comment__icon {
+  color: var(--blue);
+}
+
+.link {
+  color: var(--blue);
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.comment__container {
+  display: flex;
+  padding: 0.5rem;
+  border: 1px solid transparent;
+  margin-top: -1px;
+}
+
+.comment__container:hover {
+  border: 1px solid var(--blue);
+}
+
+.comment__line {
+  border-left: 2px dashed var(--blue);
+  margin-right: 0.5rem;
+}
+
+.comment {
+  flex: 1;
+  padding: 0.5rem;
+  border-radius: 3px;
+  background: var(--grey);
+}
+
+.comment > *:not(:last-child) {
+  margin-bottom: 0.5rem;
+}
+
+.comment__header {
+  font-size: 0.8rem;
+}
+
+.comment__header > *:not(:last-child) {
+  margin-right: 0.5rem;
+}
+
+.comment__user {
+  text-decoration: none;
+  color: var(--blue);
+}
+
+.comment__user:hover {
+  text-decoration: underline;
+}
+
+.comment__footer {
+  font-size: 0.8rem;
+}

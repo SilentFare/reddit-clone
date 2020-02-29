@@ -9,13 +9,6 @@ export const UserHeader = ({ userName, userSection }) => {
     <div className={styles.user__header}>
       <NavLink
         exact={true}
-        to={`/u/${userName}`}
-        className={styles.user__header__section}
-        activeClassName={styles.section_underline}
-      >
-        Overview
-      </NavLink>
-      <NavLink
         to={`/u/${userName}/posts`}
         className={styles.user__header__section}
         activeClassName={styles.section_underline}
@@ -23,25 +16,12 @@ export const UserHeader = ({ userName, userSection }) => {
         Posts
       </NavLink>
       <NavLink
+        exact={true}
         to={`/u/${userName}/comments`}
         className={styles.user__header__section}
         activeClassName={styles.section_underline}
       >
         Comments
-      </NavLink>
-      <NavLink
-        to={`/u/${userName}/upvoted`}
-        className={styles.user__header__section}
-        activeClassName={styles.section_underline}
-      >
-        Upvoted
-      </NavLink>
-      <NavLink
-        to={`/u/${userName}/downvoted`}
-        className={styles.user__header__section}
-        activeClassName={styles.section_underline}
-      >
-        Downvoted
       </NavLink>
     </div>
   );

@@ -39,7 +39,7 @@ export const register = (data, clearForm) => async dispatch => {
   }
 };
 
-export const login = (data, clearForm) => async dispatch => {
+export const login = (data, clearForm, pathname) => async dispatch => {
   dispatch(toggleFetching());
   try {
     const response = await fetch('/api/users/login', {
@@ -54,7 +54,7 @@ export const login = (data, clearForm) => async dispatch => {
       localStorage.setItem('token', responseData.token);
       dispatch(receiveSession(responseData.user));
       dispatch(toggleLogin());
-      window.location.href = '/';
+      window.location.href = pathname;
       clearForm();
     }
   } catch (error) {
@@ -62,7 +62,7 @@ export const login = (data, clearForm) => async dispatch => {
   }
 };
 
-export const logout = () => async dispatch => {
+export const logout = pathname => async dispatch => {
   try {
     const response = await fetch('/api/users/logout', {
       method: 'GET',
@@ -70,7 +70,7 @@ export const logout = () => async dispatch => {
     });
     if (response.ok) {
       localStorage.removeItem('token');
-      window.location.href = '/';
+      window.location.href = pathname;
     }
   } catch (error) {
     console.log(error);

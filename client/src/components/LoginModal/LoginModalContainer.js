@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 
 import { LoginModal } from './LoginModal';
 import { toggleLogin, toggleRegister } from '../../ducks/modals';
@@ -10,4 +11,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = { toggleLogin, toggleRegister, login };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginModal);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(LoginModal));

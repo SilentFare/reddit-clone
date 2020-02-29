@@ -72,7 +72,7 @@ export const PostCard = ({
             Posted by{' '}
             <Link
               onClick={event => event.stopPropagation()}
-              to={`/u/${user}`}
+              to={`/u/${user}/posts`}
               className={styles.post__card__user}
             >
               {`u/${user}`}
